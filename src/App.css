@@ -4,14 +4,14 @@
   box-sizing: border-box;
 }
 
-html {
-  font-size: 62.5%;
-}
-
 body {
   background-color: rgb(226, 225, 225);
   color: rgb(0, 0, 0);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Nunito", sans-serif;
+}
+
+.itemList {
+  font-size: 0.9rem;
 }
 
 @tailwind base;
