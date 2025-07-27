@@ -1,14 +1,14 @@
 import './App.css';
 import SideBar from './components/SideBar';
+import Chats from './components/Chats';
 
 function App() {
   return (
-    <div className="App">
-      <SideBar/>
+    <div className="flex h-screen">
+        <SideBar />
+        
+        <Chats />
       
-      <div className='main'>
-        {/* Contenido principal de tu clon de ChatGPT */}
-      </div>
     </div>
   );
 }
