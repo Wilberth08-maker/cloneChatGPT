@@ -1,4 +1,35 @@
+import { useState } from 'react';
+
 const Chats = () => {
+
+    const [input, setInput ] = useState("");
+    const [messages, setMessages] = useState([]);
+
+    const handleSendMessage = async () => {
+        if (input.trim() === "") return;
+        const userMessage = {role: 'user', content: input.trim ()};
+        try {
+            const response = await fetch('http://localhost:5000', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userMessage.content }),
+            });
+            if (!response.ok) {
+                throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            const botReply = { role: 'assistant', content: data.reply };
+            console.log("Respuesta de OpenAI:", response);
+            setInput(""); // Limpiar el input después de enviar
+        } catch (error) {
+            console.error("Error al enviar el mensaje:", error);
+        }
+    }
+
+
     return (
         <div className=" flex-1 p-2 bg-white flex flex-col h-screen">
             <div className="flex flex-col h-full">
@@ -61,84 +92,13 @@ const Chats = () => {
                     </h1>
 
                     <div className="w-full max-w-3xl space-y-4"> 
-                        <div className="flex justify-start">
+                        {messages.map((msg, index) => (
+                        <div key={index} className="flex justify-start">
                             <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
-                                <span>¡Hola! Soy tu asistente de IA. ¿En qué puedo ayudarte hoy?</span>
+                                <span>{msg.content}</span>
                             </div>
                         </div>
-
-                        
-                        <div className="flex justify-end">
-                            <div className="bg-[#e0e7ff] text-[#5e5cd1] p-3 rounded-lg max-w-[70%]">
-                                <span>Quiero saber cómo centrar un div en CSS.</span>
-                            </div>
-                        </div>
-
-                        
-                        <div className="flex justify-start">
-                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
-                                <span>Claro, existen varias formas. Una de las más comunes es usando Flexbox.</span>
-                            </div>
-                        </div>
-                        
-                        <div className="flex justify-start">
-                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
-                                <span>¡Hola! Soy tu asistente de IA. ¿En qué puedo ayudarte hoy?</span>
-                            </div>
-                        </div>
-
-                        
-                        <div className="flex justify-end">
-                            <div className="bg-[#e0e7ff] text-[#5e5cd1] p-3 rounded-lg max-w-[70%]">
-                                <span>Quiero saber cómo centrar un div en CSS.</span>
-                            </div>
-                        </div>
-
-                        
-                        <div className="flex justify-start">
-                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
-                                <span>Claro, existen varias formas. Una de las más comunes es usando Flexbox.</span>
-                            </div>
-                        </div>
-                        
-                        <div className="flex justify-start">
-                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
-                                <span>¡Hola! Soy tu asistente de IA. ¿En qué puedo ayudarte hoy?</span>
-                            </div>
-                        </div>
-
-                        
-                        <div className="flex justify-end">
-                            <div className="bg-[#e0e7ff] text-[#5e5cd1] p-3 rounded-lg max-w-[70%]">
-                                <span>Quiero saber cómo centrar un div en CSS.</span>
-                            </div>
-                        </div>
-
-                        
-                        <div className="flex justify-start">
-                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
-                                <span>Claro, existen varias formas. Una de las más comunes es usando Flexbox.</span>
-                            </div>
-                        </div>
-                        
-                        <div className="flex justify-start">
-                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
-                                <span>¡Hola! Soy tu asistente de IA. ¿En qué puedo ayudarte hoy?</span>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end">
-                            <div className="bg-[#e0e7ff] text-[#5e5cd1] p-3 rounded-lg max-w-[70%]">
-                                <span>Quiero saber cómo centrar un div en CSS.</span>
-                            </div>
-                        </div>
-
-                        
-                        <div className="flex justify-start">
-                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
-                                <span>Claro, existen varias formas. Una de las más comunes es usando Flexbox.</span>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
                 
@@ -149,7 +109,16 @@ const Chats = () => {
                             type="text"
                             placeholder="Pregunta lo que quieras"
                             className="w-full py-3 px-4 rounded-lg bg-white text-black placeholder-gray-400 focus:outline-none "
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            oneKeyPress={(e) => {
+                                if (e.key === 'Enter')  {
+                                    handleSendMessage();
+                                    setInput(''); 
+                                }
+                            }}
                             />
+                        
                     </div>
 
                     <div className="flex justify-between items-center space-x-4">
@@ -170,9 +139,16 @@ const Chats = () => {
                                 <button className="group p-2 rounded-3xl transition-colors duration-200 hover:bg-gray-100">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-label="" class="icon" font-size="inherit"><path d="M15.7806 10.1963C16.1326 10.3011 16.3336 10.6714 16.2288 11.0234L16.1487 11.2725C15.3429 13.6262 13.2236 15.3697 10.6644 15.6299L10.6653 16.835H12.0833L12.2171 16.8486C12.5202 16.9106 12.7484 17.1786 12.7484 17.5C12.7484 17.8214 12.5202 18.0894 12.2171 18.1514L12.0833 18.165H7.91632C7.5492 18.1649 7.25128 17.8672 7.25128 17.5C7.25128 17.1328 7.5492 16.8351 7.91632 16.835H9.33527L9.33429 15.6299C6.775 15.3697 4.6558 13.6262 3.84992 11.2725L3.76984 11.0234L3.74445 10.8906C3.71751 10.5825 3.91011 10.2879 4.21808 10.1963C4.52615 10.1047 4.84769 10.2466 4.99347 10.5195L5.04523 10.6436L5.10871 10.8418C5.8047 12.8745 7.73211 14.335 9.99933 14.335C12.3396 14.3349 14.3179 12.7789 14.9534 10.6436L15.0052 10.5195C15.151 10.2466 15.4725 10.1046 15.7806 10.1963ZM12.2513 5.41699C12.2513 4.17354 11.2437 3.16521 10.0003 3.16504C8.75675 3.16504 7.74835 4.17343 7.74835 5.41699V9.16699C7.74853 10.4104 8.75685 11.418 10.0003 11.418C11.2436 11.4178 12.2511 10.4103 12.2513 9.16699V5.41699ZM13.5814 9.16699C13.5812 11.1448 11.9781 12.7479 10.0003 12.748C8.02232 12.748 6.41845 11.1449 6.41828 9.16699V5.41699C6.41828 3.43889 8.02221 1.83496 10.0003 1.83496C11.9783 1.83514 13.5814 3.439 13.5814 5.41699V9.16699Z"></path></svg>
                                 </button>
-                                <button className="group p-2 rounded-3xl transition-colors duration-200 hover:bg-gray-100 bg-gray-200">
+                                {/* Botón de enviar mensaje, si no hay nada en el input muestra botón de audio, si hay algo aparece el botón de enviar */}
+                                <button className={`group p-2 rounded-3xl transition-colors duration-200 hover:bg-gray-100 bg-gray-200 ${input.trim() === '' ? 'hover:bg-gray-100' : 'hidden'}`}>
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="icon"><path d="M7.33496 15.5V4.5C7.33496 4.13275 7.63275 3.83499 8 3.83496C8.36727 3.83496 8.66504 4.13273 8.66504 4.5V15.5C8.66504 15.8673 8.36727 16.165 8 16.165C7.63275 16.165 7.33496 15.8673 7.33496 15.5ZM11.335 13.1309V7.20801C11.335 6.84075 11.6327 6.54298 12 6.54297C12.3673 6.54297 12.665 6.84074 12.665 7.20801V13.1309C12.665 13.4981 12.3672 13.7959 12 13.7959C11.6328 13.7959 11.335 13.4981 11.335 13.1309ZM3.33496 11.3535V8.81543C3.33496 8.44816 3.63273 8.15039 4 8.15039C4.36727 8.15039 4.66504 8.44816 4.66504 8.81543V11.3535C4.66504 11.7208 4.36727 12.0186 4 12.0186C3.63273 12.0186 3.33496 11.7208 3.33496 11.3535ZM15.335 11.3535V8.81543C15.335 8.44816 15.6327 8.15039 16 8.15039C16.3673 8.15039 16.665 8.44816 16.665 8.81543V11.3535C16.665 11.7208 16.3673 12.0186 16 12.0186C15.6327 12.0186 15.335 11.7208 15.335 11.3535Z"></path></svg>
                                 </button>
+                            <button
+                                className={`group p-2 rounded-3xl transition-colors duration-200 hover:bg-gray-100 bg-gray-200${input.trim() === '' ? 'bg-gray-200' : 'bg-black text-white hover:bg-gray-900'}`}
+                                onClick={handleSendMessage}
+                            >
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="icon"><path d="M8.99992 16V6.41407L5.70696 9.70704C5.31643 10.0976 4.68342 10.0976 4.29289 9.70704C3.90237 9.31652 3.90237 8.6835 4.29289 8.29298L9.29289 3.29298L9.36907 3.22462C9.76184 2.90427 10.3408 2.92686 10.707 3.29298L15.707 8.29298L15.7753 8.36915C16.0957 8.76192 16.0731 9.34092 15.707 9.70704C15.3408 10.0732 14.7618 10.0958 14.3691 9.7754L14.2929 9.70704L10.9999 6.41407V16C10.9999 16.5523 10.5522 17 9.99992 17C9.44764 17 8.99992 16.5523 8.99992 16Z"></path></svg>
+                            </button>
                             </div>
                         </div>
                     </div>
