@@ -1,7 +1,7 @@
 
 const SideBar = () => {
   return (
-    <div className='sideBar bg-[#fafafa] p-4 text-black w-64 flex flex-col h-screen'>
+    <div className='sideBar bg-[#fafafa] p-4 text-black w-64 flex flex-col h-screen border-r border-gray-100'>
         <div className='upperSide flex flex-col flex-grow'>
           <div className='upperSideTop flex items-center mb-6 justify-between'>
             <button className='group p-2 rounded-xl transition-colors duration-200 hover:bg-[#ebebeb]'>

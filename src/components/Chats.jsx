@@ -1,7 +1,7 @@
 const Chats = () => {
     return (
-        <div className=" flex-1 p-2 bg-white flex flex-col">
-            <div className="flex flex-col flex-grow">
+        <div className=" flex-1 p-2 bg-white flex flex-col h-screen">
+            <div className="flex flex-col h-full">
                 <div className="flex items-center mb-2 justify-between">
                     <button className="flex items-center justify-between p-2 rounded-xl text-gray-900 hover:bg-[#ebebeb] transition-colors duration-200 gap-1">
                         <h1 className="text-lg flex-grow text-center">ChatGPT</h1>
@@ -54,24 +54,108 @@ const Chats = () => {
                         </svg>
                     </button>
                 </div>
-                <div className="flex flex-col items-center justify-center flex-grow w-full h-full p-4">
+
+                <div className="flex flex-col items-center flex-grow overflow-y-auto p-4">
                     <h1 className="text-3xl font-semibold text-gray-800 mb-6">
                         Hola. ¿Listo para empezar?
                     </h1>
 
-                    <div className="w-full max-w-3xl bg-white rounded-3xl shadow-md p-4 border border-gray-100">
-                        <div className="relative flex items-center mb-1">
-                            <input
-                                type="text"
-                                placeholder="Pregunta lo que quieras"
-                                className="w-full py-3 px-4 rounded-lg bg-white text-black placeholder-gray-400 focus:outline-none "
-                            />
+                    <div className="w-full max-w-3xl space-y-4"> 
+                        <div className="flex justify-start">
+                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
+                                <span>¡Hola! Soy tu asistente de IA. ¿En qué puedo ayudarte hoy?</span>
+                            </div>
                         </div>
 
-                        <div className="flex justify-between items-center space-x-4">
-                            <div className="flex space-x-2">
-                                <button className="group p-2 rounded-3xl transition-colors duration-200 hover:bg-gray-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        
+                        <div className="flex justify-end">
+                            <div className="bg-[#e0e7ff] text-[#5e5cd1] p-3 rounded-lg max-w-[70%]">
+                                <span>Quiero saber cómo centrar un div en CSS.</span>
+                            </div>
+                        </div>
+
+                        
+                        <div className="flex justify-start">
+                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
+                                <span>Claro, existen varias formas. Una de las más comunes es usando Flexbox.</span>
+                            </div>
+                        </div>
+                        
+                        <div className="flex justify-start">
+                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
+                                <span>¡Hola! Soy tu asistente de IA. ¿En qué puedo ayudarte hoy?</span>
+                            </div>
+                        </div>
+
+                        
+                        <div className="flex justify-end">
+                            <div className="bg-[#e0e7ff] text-[#5e5cd1] p-3 rounded-lg max-w-[70%]">
+                                <span>Quiero saber cómo centrar un div en CSS.</span>
+                            </div>
+                        </div>
+
+                        
+                        <div className="flex justify-start">
+                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
+                                <span>Claro, existen varias formas. Una de las más comunes es usando Flexbox.</span>
+                            </div>
+                        </div>
+                        
+                        <div className="flex justify-start">
+                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
+                                <span>¡Hola! Soy tu asistente de IA. ¿En qué puedo ayudarte hoy?</span>
+                            </div>
+                        </div>
+
+                        
+                        <div className="flex justify-end">
+                            <div className="bg-[#e0e7ff] text-[#5e5cd1] p-3 rounded-lg max-w-[70%]">
+                                <span>Quiero saber cómo centrar un div en CSS.</span>
+                            </div>
+                        </div>
+
+                        
+                        <div className="flex justify-start">
+                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
+                                <span>Claro, existen varias formas. Una de las más comunes es usando Flexbox.</span>
+                            </div>
+                        </div>
+                        
+                        <div className="flex justify-start">
+                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
+                                <span>¡Hola! Soy tu asistente de IA. ¿En qué puedo ayudarte hoy?</span>
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end">
+                            <div className="bg-[#e0e7ff] text-[#5e5cd1] p-3 rounded-lg max-w-[70%]">
+                                <span>Quiero saber cómo centrar un div en CSS.</span>
+                            </div>
+                        </div>
+
+                        
+                        <div className="flex justify-start">
+                            <div className="bg-gray-200 text-gray-800 p-3 rounded-lg max-w-[70%]">
+                                <span>Claro, existen varias formas. Una de las más comunes es usando Flexbox.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div className="w-full max-w-3xl bg-white rounded-3xl shadow-sm p-4 border border-gray-100 self-center">
+                    <div className="relative flex items-center mb-1">
+                        <input
+                            type="text"
+                            placeholder="Pregunta lo que quieras"
+                            className="w-full py-3 px-4 rounded-lg bg-white text-black placeholder-gray-400 focus:outline-none "
+                            />
+                    </div>
+
+                    <div className="flex justify-between items-center space-x-4">
+                        <div className="flex space-x-2">
+                            <button className="group p-2 rounded-3xl transition-colors duration-200 hover:bg-gray-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                     </svg>
                                 </button>
@@ -81,8 +165,8 @@ const Chats = () => {
                                         Herramientas
                                     </span>
                                 </button>
-                            </div>
-                            <div className="flex space-x-2">
+                        </div>
+                        <div className="flex space-x-2">
                                 <button className="group p-2 rounded-3xl transition-colors duration-200 hover:bg-gray-100">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-label="" class="icon" font-size="inherit"><path d="M15.7806 10.1963C16.1326 10.3011 16.3336 10.6714 16.2288 11.0234L16.1487 11.2725C15.3429 13.6262 13.2236 15.3697 10.6644 15.6299L10.6653 16.835H12.0833L12.2171 16.8486C12.5202 16.9106 12.7484 17.1786 12.7484 17.5C12.7484 17.8214 12.5202 18.0894 12.2171 18.1514L12.0833 18.165H7.91632C7.5492 18.1649 7.25128 17.8672 7.25128 17.5C7.25128 17.1328 7.5492 16.8351 7.91632 16.835H9.33527L9.33429 15.6299C6.775 15.3697 4.6558 13.6262 3.84992 11.2725L3.76984 11.0234L3.74445 10.8906C3.71751 10.5825 3.91011 10.2879 4.21808 10.1963C4.52615 10.1047 4.84769 10.2466 4.99347 10.5195L5.04523 10.6436L5.10871 10.8418C5.8047 12.8745 7.73211 14.335 9.99933 14.335C12.3396 14.3349 14.3179 12.7789 14.9534 10.6436L15.0052 10.5195C15.151 10.2466 15.4725 10.1046 15.7806 10.1963ZM12.2513 5.41699C12.2513 4.17354 11.2437 3.16521 10.0003 3.16504C8.75675 3.16504 7.74835 4.17343 7.74835 5.41699V9.16699C7.74853 10.4104 8.75685 11.418 10.0003 11.418C11.2436 11.4178 12.2511 10.4103 12.2513 9.16699V5.41699ZM13.5814 9.16699C13.5812 11.1448 11.9781 12.7479 10.0003 12.748C8.02232 12.748 6.41845 11.1449 6.41828 9.16699V5.41699C6.41828 3.43889 8.02221 1.83496 10.0003 1.83496C11.9783 1.83514 13.5814 3.439 13.5814 5.41699V9.16699Z"></path></svg>
                                 </button>
@@ -92,9 +176,12 @@ const Chats = () => {
                             </div>
                         </div>
                     </div>
+                    <div className="text-center text-gray-700 mt-4 text-xs">
+                        <p>ChatGPT puede cometer errores. Comprueba la información importante.</p>
+                    </div>
                 </div>
+                
             </div>
-        </div>
     );
 };
 
