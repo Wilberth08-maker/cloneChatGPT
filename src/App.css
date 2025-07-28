@@ -10,6 +10,10 @@ body {
   font-family: "Nunito", sans-serif;
 }
 
+textarea {
+  overflow-y: hidden;
+}
+
 .itemList {
   font-size: 0.9rem;
 }

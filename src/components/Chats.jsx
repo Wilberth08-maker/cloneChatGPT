@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import '../App.css';
 
 const Chats = () => {
 
@@ -10,7 +11,6 @@ const Chats = () => {
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
-
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
@@ -58,6 +58,14 @@ const Chats = () => {
             e.preventDefault(); // Previene el salto de línea por defecto
             handleSendMessage(); // Envía el mensaje
         }
+    };
+
+    const handleInputChange = (e) => {
+        setInput(e.target.value);
+
+        const textarea = e.target;
+        textarea.style.height = 'auto'; // reinicia altura
+        textarea.style.height = `${textarea.scrollHeight}px`; // ajusta a contenido
     };
 
 
@@ -146,9 +154,9 @@ const Chats = () => {
                             type="text"
                             rows="1"
                             placeholder="Pregunta lo que quieras"
-                            className="w-full py-2 px-3 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none resize-none min-h-[50px] max-h-[208px] overflow-y-auto leading-6 text-base box-border" 
+                            className="w-full py-2 px-3 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none resize-none min-h-[50px] max-h-[156px] overflow-y-auto leading-6 text-base box-border" 
                             value={input}
-                            onChange={(e) => setInput(e.target.value)}
+                            onChange={handleInputChange}
                             onKeyDown={handleKeyDown}
                             />
                         
