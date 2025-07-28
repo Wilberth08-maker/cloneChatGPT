@@ -1,4 +1,4 @@
-
+import '../App.css';
 const SideBar = () => {
   return (
     <div className='sideBar bg-[#fafafa] p-4 text-black w-64 flex flex-col h-screen border-r border-gray-100'>
