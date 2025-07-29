@@ -5,7 +5,17 @@ module.exports = {
     "./src/**/*.{html,js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        'slide-down': {
+          '0%':   { opacity: '1', transform: 'translateY(-0.5rem)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        'slide-down': 'slide-down 250ms ease-out forwards',
+      },
+    },
   },
   plugins: [],
 }

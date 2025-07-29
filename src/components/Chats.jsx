@@ -151,10 +151,10 @@ const Chats = () => {
                             <div key={index} 
                             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                 <div 
-                                className={`p-4 rounded-xl max-w-[70%] ${
+                                className={`p-2.5 rounded-3xl max-w-[70%] ${
                                             msg.role === 'user' ? 'bg-[#f5f5f5] text-black' : 'bg-white text-black'
                                         } whitespace-pre-wrap break-words`}>
-                                    <span>{msg.content}</span>
+                                    <span className='p-2 items-center block '>{msg.content}</span>
                                 </div>
                             </div>
                             ))}
@@ -164,7 +164,7 @@ const Chats = () => {
                     </div>
                     
 
-                    <div className="w-full max-w-3xl bg-white rounded-3xl shadow-sm p-2 border border-gray-100 self-center">
+                    <div className={`w-full max-w-3xl bg-white rounded-3xl shadow-sm p-2 border border-gray-100 self-center ${messages.length > 0 ? 'animate-slide-down' : ''}`}>
                         <div className="relative flex items-center pr-2.5 pb-1 pt-1">
                             <textarea
                                 ref={textareaRef}
