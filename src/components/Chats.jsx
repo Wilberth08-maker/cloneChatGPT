@@ -1,80 +1,51 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import '../App.css';
 
-const Chats = () => {
+const Chats = ({
+    messages,
+    setMessages,
+    input,
+    setInput,
+    isLoading,
+    setIsLoading,
+    handleSendMessage, 
+    currentChatId, 
+    chats 
+}) => {     
 
-    const [input, setInput ] = useState("");
-    const [messages, setMessages] = useState([]);
     const messagesEndRef = useRef(null);
     const textareaRef = useRef(null);
 
     // Función para hacer scroll al último mensaje
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
     useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
-
-
-    const handleSendMessage = async () => {
-        if (input.trim() === "") return;
-        const userMessageContent = input.trim();
-        const newUserMessage = {role: 'user', content: userMessageContent};
-
-        setMessages((prevMessages) => [...prevMessages, newUserMessage]);
-        
-        setInput(""); // Limpiar el input después de enviar
-
-        const textarea = textareaRef.current;
-        if (textarea) {
-            textarea.style.height = "auto";
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
+    }, [messages, isLoading]);
 
-        try {
-            const response = await fetch('http://localhost:5000/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message: userMessageContent }),
-            });
-            if (!response.ok) {
-                throw new Error(`Error del servidor: ${response.status} ${response.statusText}`);
-            }
-
-            const data = await response.json();
-
-            const botReply = { role: 'assistant', content: data.reply };
-
-            setMessages((prevMessages) => [...prevMessages, botReply]);
-
-            console.log("Respuesta de OpenAI:", response);
-            setInput(""); // Limpiar el input después de enviar
-        } catch (error) {
-            console.error("Error al enviar el mensaje:", error);
-            setMessages((prevMessages) => [
-                ...prevMessages,
-                { role: 'system', content: `Lo siento, hubo un error al obtener la respuesta. Inténtalo de nuevo.`}
-            ]);
+    // Auto-ajustar el tamaño del textarea
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
         }
+    }, [input]);
+
+    const handleInputChange = (e) => {
+        setInput(e.target.value);
     }
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) { // Si es Enter y NO Shift+Enter
             e.preventDefault(); // Previene el salto de línea por defecto
-            handleSendMessage(); // Envía el mensaje
+            if (!isLoading) {         
+                handleSendMessage(); // Envía el mensaje
+            }  
         }
     };
 
-    const handleInputChange = (e) => {
-        setInput(e.target.value);
 
-        const textarea = e.target;
-        textarea.style.height = 'auto'; // reinicia altura
-        textarea.style.height = `${textarea.scrollHeight}px`; // ajusta a contenido
-    };
-
+    
 
     return (
         <>
