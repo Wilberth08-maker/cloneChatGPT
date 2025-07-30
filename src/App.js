@@ -48,12 +48,10 @@ function App() {
     fetchChats();
   }, [fetchChats]);
 
-  // Tu useEffect actual (con la condición)
   useEffect(() => {
     if (skipNextSync) {
-      setSkipNextSync(true); // ← ¡Muy importante! Solo se salta UNA vez
+      setSkipNextSync(true); 
 
-      // Aún podemos intentar actualizar los mensajes si el placeholder '...' ya fue reemplazado
       const chat = chats.find(c => c.id === currentChatID);
       if (chat && chat.messages && chat.messages.some(m => m.content !== '')) {
         setMessages(chat.messages);
@@ -108,22 +106,13 @@ function App() {
           chatIdToUse = newChat.id;
 
           newChatCreated = true;
-
-          // await fetchChats();
           
           setChats(prevChats => [{ 
                 ...newChat, 
                 messages: [newUserMessage, { role: 'assistant', content: '' }] 
             }, ...prevChats]);
           
-          setCurrentChatID(chatIdToUse);
-            // setChats(prevChats => [...prevChats, { ...newChat, messages: [newUserMessage] }]);
-
-          // setMessages([newUserMessage]); // Inicia el chat con el mensaje del usuario
-
-          
-          // setChats(prevChats => [{ ...newChat, messages: [newUserMessage] }, ...prevChats]); // Añade el nuevo chat al principio
-          // setCurrentChatID(chatIdToUse); 
+          setCurrentChatID(chatIdToUse);           
           } catch (error) {
             console.error("Error creando nuevo chat:", error);
             setIsLoading(false);
@@ -132,7 +121,7 @@ function App() {
             const filteredMessages = prevMessages.filter(msg => msg !== newUserMessage && msg.content !== '...');
             return [...filteredMessages, { role: 'assistant', content: "Lo siento, no se pudo crear un nuevo chat. Por favor, inténtalo de nuevo." }];
           });
-            return; // Salir de la función si no se pudo crear el chat
+            return;
         }
       }
       // 2. Prepara el mensaje del usuario para enviar a la IA
@@ -161,8 +150,7 @@ function App() {
       const data = await response.json();
       const aiMessage = { role: 'assistant', content: data.reply };
 
-        // Optimización: Actualizar el estado 'chats' directamente con la respuesta de la IA.
-        // Esto evitará un `fetchChats()` extra y hará que la UI se actualice más rápido.
+      //Actualir el estado 'chats' directamente con la respuesta de la IA.
       setChats(prevChats => {
           return prevChats.map(chat =>
               chat.id === chatIdToUse
@@ -174,37 +162,6 @@ function App() {
         
       console.log('Respuesta del backend recibida:', data.reply);
 
-      // *setMessages(prevMessages => [...prevMessages, aiMessage]);
-
-      // 3. Actualizar el estado con la respuesta de la IA
-      // setMessages(prevMessages => [...prevMessages, aiMessage]);
-  
-      // 4. Actualiza el chat en el backend con la respuesta de la IA
-      // await fetch(`${API_BASE_URL}/chats/${chatIdToUse}`, {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ messages: [...currentMessagesIncludingNewUser, aiMessage] }),
-      // });
-
-      // *await fetchChats(); // Refresca la lista de chats después de enviar el mensaje
-
-      // // Actualiza el estado de chats con el nuevo mensaje
-      // setChats(prevChats => prevChats.map(chat =>
-      //   chat.id === chatIdToUse
-      //     ? { ...chat, messages: [...currentMessagesIncludingNewUser, aiMessage] }
-      //     : chat
-      // ));
-
-      // 5. Si el título del chat no se ha generado, toma el primer mensaje del usuario
-      // if (newChatCreated) {
-      //   setChats(prevChats => prevChats.map(chat => {
-      //     if (chat.id === chatIdToUse) {
-      //       return { ...chat, title: newUserMessage.content.substring(0, 30) + (newUserMessage.content.length > 30 ? '...' : '') };
-      //     }
-      //     return chat;
-      //   }));
-      // }     
-
     } catch (error) {
       console.error("Error al comunicarse con la IA o guardar chat:", error);
       setMessages(prevMessages => {
@@ -215,10 +172,6 @@ function App() {
         await fetchChats();
     } finally {
       setIsLoading(false);
-      // await fetchChats(); // Refresca la lista de chats después de enviar el mensaje
-      // if (newChatCreated) {
-      //   setCurrentChatID(chatIdToUse);
-      // }
     }
   };
 
@@ -253,26 +206,11 @@ function App() {
 
       await fetchChats(); // Refresca la lista de chats después de eliminar
 
-      // setChats(prevChats => {
-      //   const updatedChats = prevChats.filter(chat => chat.id !== chatIdToDelete);
-      //   // Si no quedan chats, limpia todo
-      //   if (updatedChats.length === 0) {
-      //     setCurrentChatID(null);
-      //     setMessages([]);
-      //   } else if (currentChatID === chatIdToDelete) {
-      //     setCurrentChatID(updatedChats.length > 0 ? updatedChats[0].id : null);
-      //   }
-      //   return updatedChats;
-      // });
-
     } catch (error) {
       console.error("Error al eliminar chat:", error);
       setMessages(prevMessages => [...prevMessages, { role: 'assistant', content: `No se pudo eliminar el chat: ${error.message}` }]);
     }
   };
-
-  
-
 
   return (
     <div className="flex h-screen">
