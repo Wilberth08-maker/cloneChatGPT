@@ -105,7 +105,7 @@ const Chats = ({
                         </svg>
                     </button>
                 </div>
-                <div className={`flex flex-col flex-grow overflow-y-auto p-1 ${messages.length === 0 ? "justify-center items-center" : "justify-start"} `}>
+                <div className={`flex flex-col flex-grow overflow-y-auto p-1 ${messages.length === 0 ? "justify-center items-center pb-5" : "justify-start"} `}>
                     <div className={`chat-scroll flex flex-col items-center overflow-y-auto pb-4 ${messages.length > 0 ? "flex-grow" : "justify-center"} `}>
                         {messages.length === 0 && (
                             <div className="flex flex-col items-center text-center">
