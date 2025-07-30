@@ -75,7 +75,7 @@ function App() {
     let chatIdToUse = currentChatID;
     let newChatCreated = false;
     
-    setMessages(prevMessages => [...prevMessages, newUserMessage]);    
+    setMessages(prevMessages => [...prevMessages, newUserMessage, { role: 'assistant', content: '' }]);    
     setInput("");
     setIsLoading(true);
 
@@ -211,6 +211,7 @@ function App() {
       //   }
       //   return updatedChats;
       // });
+
     } catch (error) {
       console.error("Error al eliminar chat:", error);
       setMessages(prevMessages => [...prevMessages, { role: 'assistant', content: `No se pudo eliminar el chat: ${error.message}` }]);

@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   background-color: rgb(226, 225, 225);
   color: rgb(0, 0, 0);
@@ -41,7 +45,8 @@ body {
 button:focus {
   outline: none;
 }
+button {
+  cursor: pointer;
+}
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
