@@ -51,8 +51,8 @@ const Chats = ({
         <>
         <div className=" flex-1 bg-white flex flex-col h-screen">
             <div className="flex flex-col h-full">
-                <div className={`${messages.length > 0 ? "border-b border-gray-100" : ""} flex items-center justify-between`}>
-                    <button className="flex items-center justify-between p-2 rounded-xl text-gray-900 hover:bg-[#ebebeb] transition-colors duration-200 gap-1">
+                <div className={`${messages.length > 0 ? "border-b border-gray-100" : ""} flex items-center justify-between pl-2 pr-2 pt-1.5 pb-1.5 `}>
+                    <button className="flex items-center justify-between p-1.5 rounded-xl text-gray-900 hover:bg-[#ebebeb] transition-colors duration-200 gap-1">
                         <h1 className="text-lg flex-grow text-center">ChatGPT</h1>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +86,7 @@ const Chats = ({
                             </span>
                         </button>
                     )}
-                    <button className="group p-3 rounded-3xl transition-colors duration-200 hover:bg-[#ebebeb]">
+                    <button className="group p-2 rounded-3xl transition-colors duration-200 hover:bg-[#ebebeb]">
                         <svg
                             width="20"
                             height="20"
@@ -105,7 +105,7 @@ const Chats = ({
                         </svg>
                     </button>
                 </div>
-                <div className={`flex flex-col flex-grow overflow-y-auto p-2 ${messages.length === 0 ? "justify-center items-center" : "justify-start"} `}>
+                <div className={`flex flex-col flex-grow overflow-y-auto p-1 ${messages.length === 0 ? "justify-center items-center" : "justify-start"} `}>
                     <div className={`chat-scroll flex flex-col items-center overflow-y-auto pb-4 ${messages.length > 0 ? "flex-grow" : "justify-center"} `}>
                         {messages.length === 0 && (
                             <div className="flex flex-col items-center text-center">
@@ -199,7 +199,7 @@ const Chats = ({
                             </div>
                         </div>
                         {messages.length > 0 && (
-                        <div className="text-center text-gray-700 p-2 text-xs">
+                        <div className="text-center text-gray-700 pt-2 pb-1 text-xs">
                             <p>ChatGPT puede cometer errores. Comprueba la información importante.</p>
                         </div>
                         )}
