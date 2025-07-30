@@ -159,9 +159,6 @@ function App() {
           );
       });
 
-        
-      console.log('Respuesta del backend recibida:', data.reply);
-
     } catch (error) {
       console.error("Error al comunicarse con la IA o guardar chat:", error);
       setMessages(prevMessages => {
