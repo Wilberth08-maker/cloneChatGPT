@@ -1,3 +1,4 @@
+import { useDarkMode } from '../context/DarkModeContext';
 import '../App.css';
 
 const SideBar = ({ chats, currentChatId, onNewChat, onChatSelect, onDeleteChat }) => {
