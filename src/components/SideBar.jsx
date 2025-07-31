@@ -40,7 +40,6 @@ const SideBar = ({ chats, currentChatId, onNewChat, onChatSelect, onDeleteChat }
   return (
     <>
     {isSideBarOpen ? (
-    <div className='fixed inset-0 z-50 flex max-md:fixed'>
     <div className='sideBar bg-[#fafafa] text-black w-64 max-md:w-full flex flex-col h-screen border-r border-gray-100 overflow-y-auto chat-scroll dark:bg-gray-950 dark:text-gray-200 dark:border-gray-700'>
       <div className='upperSide flex flex-col flex-grow'>
         <div className={`${chats.length > 4 ? "border-b border-gray-100 dark:border-gray-700" : ""} upperSideTop flex items-center p-1.5 justify-between sticky top-0 bg-[#fafafa] z-10 dark:bg-gray-950 dark:text-gray-200`}>
@@ -94,7 +93,7 @@ const SideBar = ({ chats, currentChatId, onNewChat, onChatSelect, onDeleteChat }
             onClick={() => window.open("https://chatgpt.com/g/g-kZ0eYXlJe-scholar-gpt", "_blank")}
             className="itemList flex items-center justify-between w-full p-2 rounded-xl text-gray-900 hover:bg-[#ebebeb] transition-colors duration-200 dark:text-gray-200 dark:hover:bg-gray-800">
             <div className="flex-shrink-0 w-6 h-6 rounded-full overflow-hidden flex items-center justify-center bg-gray-200 mr-3">
-              <img alt="Scholar GPT Icon" src="https://chatgpt.com/backend-api/estuary/content?id=file-gk3ACPm7Tvy5DHe5aE9fqJ0W&amp;gizmo_id=g-kZ0eYXlJe&amp;ts=487029&amp;p=gpp&amp;cid=1&amp;sig=08f9c65d3f679e0884d14be40a8be88a7c87a2749b47204a868c887d5a10516e"
+              <img alt="Scholar GPT Icon" src="https://chatgpt.com/backend-api/estuary/content?id=file-gk3ACPm7Tvy5DHe5aE9fqJ0W&gizmo_id=g-kZ0eYXlJe&ts=487196&p=gpp&cid=1&sig=315ad1977453d8a844dedd0738a2a401f46a4757ce2fb1084d57be1bff820bb4"
                 className="w-full h-full object-cover" />
             </div>
             <span className="flex-grow text-left">Scholar GPT</span>
@@ -139,9 +138,8 @@ const SideBar = ({ chats, currentChatId, onNewChat, onChatSelect, onDeleteChat }
         </div>
       </div>
     </div>
-    </div>
     ) : (
-      <div className='items-center flex flex-column gap-1 w-[4%] p-1 bg-white border-r boder-gray-100 hidden md:flex'>
+      <div className='items-center flex flex-column gap-1 w-[4%] p-1 border-r boder-gray-100 dark:bg-gray-950 dark:text-gray-200 dark:border-gray-700'>
         <div
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -161,7 +159,7 @@ const SideBar = ({ chats, currentChatId, onNewChat, onChatSelect, onDeleteChat }
 
           )}
         </div>
-        <div className='flex flex-col gap-0.5 pt-2 inline-block'>
+        <div className='flex flex-col gap-0.5 pt-2 inline-block '>
           <button
             onClick={onNewChat}
             className="flex items-center justify-between w-full p-2 rounded-xl text-gray-900 hover:bg-[#ebebeb] transition-colors duration-200 gap-2 dark:text-gray-200 dark:hover:bg-gray-800">
@@ -180,18 +178,6 @@ const SideBar = ({ chats, currentChatId, onNewChat, onChatSelect, onDeleteChat }
 
         </div>
       </div>      
-    )}
-
-    {/* Botón para abrir el sidebar en pantallas pequeñas */}
-    {!isSideBarOpen && (
-      <div className="fixed top-1.5 right-10 p-2 md:hidden z-40">
-        <button onClick={() => setIsSideBarOpen(true)}>
-          {/* Ícono para abrir */}
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
     )}
 
     
