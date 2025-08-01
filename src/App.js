@@ -4,6 +4,7 @@ import SideBar from './components/SideBar';
 import Chats from './components/Chats';
 
 function App() {
+
   const [chats, setChats] = useState([]);
   const [currentChatID, setCurrentChatID] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -21,8 +22,10 @@ function App() {
       if (!response.ok) throw new Error('Error al cargar chats');
 
       const data = await response.json();
+
       setChats(data);
 
+      // Selecciona el primer chat si el chat actual ya no existe
       if (data.length > 0) {
         setCurrentChatID(prevId => {
           // Solo actualiza si el chat actual no está en la lista
@@ -48,7 +51,11 @@ function App() {
     fetchChats();
   }, [fetchChats]);
 
+  // Sincroniza los mensajes del chat actual con el estado local.
+  // Si skipNextSync está activo, evita sincronizar innecesariamente una vez.
   useEffect(() => {
+
+    // Si skipNextSync es true, evita la sincronización completa y solo actualiza mensajes una vez, sin sobrescribirlos.
     if (skipNextSync) {
       setSkipNextSync(true); 
 
@@ -59,7 +66,7 @@ function App() {
       return;
     }
 
-
+    // Si no hay un chat actual limpia los mensajes
     if (!currentChatID) {
       setMessages([]);
       return;
@@ -69,6 +76,7 @@ function App() {
 
     if (!chat || !chat.messages) return;
 
+    // Carga los mensajes del chat actual
     setMessages(chat.messages);
 
   }, [currentChatID, chats, skipNextSync]);
@@ -81,6 +89,7 @@ function App() {
     const userMessageContent = input.trim();
     const newUserMessage = { role: 'user', content: userMessageContent };
     
+    // Agrega el mensaje del usuario y una respuesta vacía del asistente.
     setMessages(prevMessages => [...prevMessages, newUserMessage, { role: 'assistant', content: '' }]); 
     setSkipNextSync(true);   
     setInput("");
@@ -103,10 +112,13 @@ function App() {
 
           const newChat = await response.json();
 
+          // Asigna el ID del nuevo chat
           chatIdToUse = newChat.id;
 
           newChatCreated = true;
           
+          // Añade el nuevo chat en la parte superior de la lista, 
+          // con el mensaje del usuario y una respuesta vacía del asistente.
           setChats(prevChats => [{ 
                 ...newChat, 
                 messages: [newUserMessage, { role: 'assistant', content: '' }] 

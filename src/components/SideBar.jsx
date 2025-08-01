@@ -33,7 +33,6 @@ const SideBar = ({ chats, currentChatId, onNewChat, onChatSelect, onDeleteChat }
 
   // Función para filtrar los chats
   const filteredChats = chats.filter(chat => {
-    console.log(chats)
     return chat && chat.title && chat.title.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
