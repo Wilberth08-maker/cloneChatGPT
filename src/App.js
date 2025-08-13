@@ -88,6 +88,17 @@ function App() {
     if (input.trim() === "") return;
     const userMessageContent = input.trim();
     const newUserMessage = { role: 'user', content: userMessageContent };
+    // Función para animar texto tipo máquina de escribir
+    const typeWriterEffect = (fullText, callback) => {
+      let index = 0;
+      const interval = setInterval(() => {
+        callback(fullText.slice(0, index + 1));
+        index++;
+        if (index === fullText.length) {
+          clearInterval(interval);
+        }
+      }, 10); // velocidad en ms
+    };
     
     // Agrega el mensaje del usuario y una respuesta vacía del asistente.
     setMessages(prevMessages => [...prevMessages, newUserMessage, { role: 'assistant', content: '' }]); 
@@ -162,13 +173,28 @@ function App() {
       const data = await response.json();
       const aiMessage = { role: 'assistant', content: data.reply };
 
-      //Actualir el estado 'chats' directamente con la respuesta de la IA.
+      //Actualizar el estado 'chats' directamente con la respuesta de la IA.
       setChats(prevChats => {
           return prevChats.map(chat =>
               chat.id === chatIdToUse
                   ? { ...chat, messages: [...messagesForIA, aiMessage], updatedAt: new Date().toISOString() }
                   : chat
           );
+      });
+
+      typeWriterEffect(data.reply, (partialText) => {
+        setChats(prevChats => prevChats.map(chat =>
+          chat.id === chatIdToUse
+            ? {
+                ...chat,
+                messages: chat.messages.map((msg, i) =>
+                  i === chat.messages.length - 1
+                    ? { ...msg, content: partialText }
+                    : msg
+                )
+              }
+            : chat
+        ));
       });
 
     } catch (error) {
