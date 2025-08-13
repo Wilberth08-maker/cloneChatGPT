@@ -160,8 +160,8 @@ const Chats = ({
                             <div key={index} 
                             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                 <div 
-                                className={`p-2.5 rounded-3xl max-w-[70%] ${
-                                            msg.role === 'user' ? 'bg-[#f5f5f5] text-black dark:text-gray-200 dark:bg-gray-800' : 'text-black dark:text-gray-200'
+                                className={`p-2.5 rounded-3xl ${
+                                            msg.role === 'user' ? 'max-w-[70%] bg-[#f5f5f5] text-black dark:text-gray-200 dark:bg-gray-800 ' : 'w-full text-black dark:text-gray-200'
                                         } whitespace-pre-wrap break-words`}>
                                     {msg.content ? (        
                                         <span className='p-2 items-center block '>{msg.content}</span>
