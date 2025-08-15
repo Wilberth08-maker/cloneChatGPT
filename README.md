@@ -1,70 +1,109 @@
-# Getting Started with Create React App
+Aplicación de Chat con React y Backend
+Este proyecto es una aplicación de chat web con una interfaz de usuario moderna construida con React y un backend simple para gestionar la persistencia de los chats. La aplicación permite a los usuarios iniciar nuevos chats, enviar mensajes y ver un historial de conversaciones.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Características
+Interfaz de Usuario Responsiva: La aplicación se adapta a diferentes tamaños de pantalla.
 
-## Available Scripts
+Gestión de Chats: Los usuarios pueden ver la lista de chats existentes, seleccionar uno para ver su historial y eliminar chats.
 
-In the project directory, you can run:
+Envío de Mensajes: Envía mensajes al backend para su procesamiento.
 
-### `npm start`
+Persistencia de Datos: El backend guarda el historial de chats y mensajes, permitiendo que las conversaciones persistan entre sesiones.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Estructura del Proyecto
+El proyecto está dividido en dos partes principales:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Frontend (React)
+src/App.js: El componente principal de la aplicación que gestiona el estado global (chats, mensajes, etc.) y la lógica de negocio (enviar mensajes, cargar chats).
 
-### `npm test`
+src/components/SideBar.js: Componente para mostrar la lista de chats y permitir la selección o eliminación de los mismos.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+src/components/Chats.js: Componente para mostrar los mensajes de la conversación actual y el campo de entrada de texto.
 
-### `npm run build`
+Backend (servidor)
+Gestiona las rutas API para crear, leer, actualizar y eliminar chats.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Se encarga de procesar los mensajes y simular una respuesta de "IA".
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Maneja la persistencia de los datos del chat.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Cómo Empezar
+Sigue estos pasos para poner en marcha el proyecto en tu máquina local.
 
-### `npm run eject`
+Prerrequisitos
+Node.js y npm instalados.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Clonar el Repositorio
+Bash
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+git clone https://github.com/Wilberth08-maker/cloneChatGPT.git
+cd cloneChatGPT
+2. Configurar el Backend
+Navega a la carpeta de tu backend (si está separada).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Instala las dependencias:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Bash
 
-## Learn More
+npm install
+Inicia el servidor de backend:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Bash
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+node server.js
+El servidor se ejecutará en http://localhost:5000.
 
-### Code Splitting
+3. Configurar el Frontend
+Asegúrate de estar en la carpeta raíz del proyecto.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Instala las dependencias de React:
 
-### Analyzing the Bundle Size
+Bash
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+npm install
+Inicia la aplicación de React:
 
-### Making a Progressive Web App
+Bash
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+npm start
+La aplicación se abrirá en http://localhost:3000.
 
-### Advanced Configuration
+Código Relevante
+El corazón de la aplicación se encuentra en el componente src/App.js. A continuación, se describen las funciones y los estados más importantes:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Estados Principales
+chats: Un array que almacena la lista de todos los chats.
 
-### Deployment
+currentChatID: El ID del chat que se está mostrando en el panel de conversación. Es null si no hay un chat seleccionado.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+messages: Un array que contiene los mensajes del chat actual.
 
-### `npm run build` fails to minify
+input: El texto del mensaje que el usuario está escribiendo.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+isLoading: Un booleano que indica si la aplicación está esperando una respuesta del backend (ej. de la "IA").
+
+Funciones Clave
+fetchChats(): Función asíncrona que se encarga de cargar la lista de chats desde el backend.
+
+handleSendMessage(): La función más compleja. Se activa al enviar un mensaje y realiza lo siguiente:
+
+Crea un nuevo chat en el backend si no hay un currentChatID seleccionado.
+
+Envía el mensaje del usuario y el historial completo al backend.
+
+Maneja la respuesta del backend ("IA") y actualiza los mensajes en la UI.
+
+Actualiza el chat en el backend para guardar el nuevo historial completo.
+
+handleNewChat(): Reinicia el estado de la UI para que el usuario pueda empezar una nueva conversación.
+
+handleChatSelect(chatId): Actualiza currentChatID para cargar los mensajes de un chat específico.
+
+handleDeleteChat(chatId): Envía una solicitud al backend para eliminar un chat y actualiza la lista de chats en la UI.
+
+Notas de Desarrollo
+Flujo de Datos Unidireccional: El estado principal de la aplicación reside en el componente App, y los datos se pasan a los componentes hijos (SideBar y Chats) a través de las props.
+
+Manejo de Errores: La aplicación utiliza bloques try...catch en las funciones asíncronas para gestionar posibles errores.
+
+Asincronía con async/await: Todas las operaciones de red se gestionan con la sintaxis async/await para un código más legible y secuencial.
