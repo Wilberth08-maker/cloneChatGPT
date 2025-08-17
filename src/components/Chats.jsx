@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDarkMode } from '../context/DarkModeContext';
-import '../App.css';
+import '../index.css';
 
 const Chats = ({
     messages,
@@ -10,8 +10,7 @@ const Chats = ({
     isLoading,
     setIsLoading,
     handleSendMessage, 
-    currentChatId, 
-    chats 
+    onOpenMenu 
 }) => {     
 
     const messagesEndRef = useRef(null);
@@ -78,6 +77,15 @@ const Chats = ({
         <div className=" flex-1 bg-white flex flex-col h-screen dark:bg-gray-900 dark:text-white">
             <div className="flex flex-col h-full dark:bg-gray-900 dark:text-gray-100 ">
                 <div className={`${messages.length > 0 ? "border-b border-gray-100 dark:border-gray-700" : ""} flex items-center justify-between pl-2 pr-2 pt-1.5 pb-1.5 `}>
+                    <div className='flex'>
+                    <button 
+                        className="md:hidden p-2 rounded-3xl text-gray-900 transition-colors duration-200 hover:bg-[#ebebeb] dark:text-gray-200 dark:hover:bg-gray-700 hover:bg-gray-100"
+                        onClick={onOpenMenu}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
+                        </svg>
+                    </button>
                     <button 
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     className="flex items-center justify-between p-1.5 rounded-xl text-gray-900 hover:bg-[#ebebeb] transition-colors duration-200 gap-1 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
@@ -97,6 +105,7 @@ const Chats = ({
                             />
                         </svg>
                     </button>
+                    </div>
                     {isMenuOpen && (
                         <div ref={menuRef} className="absolute left-68 top-8 mt-3 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-20 animate-fadeInUp dark:bg-gray-700 dark:border-gray-600">
                             <button
@@ -124,7 +133,7 @@ const Chats = ({
                             </span>
                         </button>
                     )}
-                    <button className="group p-2 rounded-3xl transition-colors duration-200 hover:bg-[#ebebeb]dark:text-gray-200 dark:hover:bg-gray-700">
+                    <button className="group p-2 rounded-3xl transition-colors duration-200 hover:bg-[#ebebeb] dark:text-gray-200 dark:hover:bg-gray-700">
                         <svg
                             width="20"
                             height="20"
@@ -143,7 +152,7 @@ const Chats = ({
                         </svg>
                     </button>
                 </div>
-                <div className={`flex flex-col flex-grow overflow-y-auto p-1 ${messages.length === 0 ? "justify-center items-center pb-5" : "justify-start"} `}>
+                <div className={`flex flex-col flex-grow overflow-y-auto p-2 ${messages.length === 0 ? "justify-center items-center pb-5" : "justify-start"} `}>
                     <div className={`chat-scroll flex flex-col items-center overflow-y-auto pb-4 p-2 ${messages.length > 0 ? "flex-grow" : "justify-center"} `}>
                         {messages.length === 0 && (
                             <div className="flex flex-col items-center text-center">
@@ -238,7 +247,7 @@ const Chats = ({
                             </div>
                         </div>
                         {messages.length > 0 && (
-                        <div className="text-center text-gray-700 pt-2 pb-1 text-xs dark:text-gray-600">
+                        <div className="text-center text-gray-700 pt-2  text-xs dark:text-gray-600">
                             <p>ChatGPT puede cometer errores. Comprueba la información importante.</p>
                         </div>
                         )}
@@ -246,6 +255,7 @@ const Chats = ({
                 </div>
                 
             </div>
+            
         </>
     );
 };
