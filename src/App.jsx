@@ -1,7 +1,8 @@
-import './App.css';
+import './index.css';
 import React, { useState, useEffect, useCallback} from 'react';
 import SideBar from './components/SideBar';
 import Chats from './components/Chats';
+import SideBarCompact from './components/SideBarCompact';
 
 function App() {
 
@@ -247,16 +248,54 @@ function App() {
     }
   };
 
+  // CONSTANTES PARA MANEJAR EL ESTADO DE LOS SIDEBAR
+  const [isCompact, setIsCompact] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
   return (
     <div className="flex h-screen">
-        <SideBar
-          chats={chats}
-          currentChatID={currentChatID}
-          onNewChat={handleNewChat}
-          onChatSelect={handleChatSelect}
-          onDeleteChat={handleDeleteChat}
-        />
-        
+      {/* ESCRITORIO */}
+      <div className='hidden md:block'>
+        {isCompact ? (
+          <SideBarCompact 
+            onExpand = {() => setIsCompact(false)}
+            onNewChat={handleNewChat}
+            />
+        ) : (
+          <SideBar 
+            onCollapse = {() => setIsCompact(true)}
+            chats={chats}
+            currentChatID={currentChatID}
+            onNewChat={handleNewChat}
+            onChatSelect={handleChatSelect}
+            onDeleteChat={handleDeleteChat}
+            className="hidden md:flex"
+            />
+        )}
+
+      </div>
+
+      {/* MÓVIL */}
+      <div className="block md:hidden">
+        {isMobileOpen && (
+          <div className='fixed inset-0 z-20 flex'>
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50"
+              onClick={() => setIsMobileOpen(false)}>
+            </div>
+            <div className='relative z-30 w-64 h-full bg-gray-800'>
+              <SideBar 
+                onClose={() => setIsMobileOpen(false)}
+                chats={chats}
+                currentChatID={currentChatID}
+                onNewChat={handleNewChat}
+                onChatSelect={handleChatSelect}
+                onDeleteChat={handleDeleteChat}
+                />
+            </div>
+          </div>
+        )}
+      </div>        
         <Chats 
           messages={messages}
           setMessages={setMessages}
@@ -265,7 +304,7 @@ function App() {
           isLoading={isLoading}
           setIsLoading={setIsLoading}
           handleSendMessage={handleSendMessage}
-          currentChatId={currentChatID}
+          onOpenMenu={() => setIsMobileOpen(true)}
         /> 
     </div>
   );
