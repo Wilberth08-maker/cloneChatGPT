@@ -1,5 +1,5 @@
 import './index.css';
-import React, { useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import SideBar from './components/SideBar';
 import Chats from './components/Chats';
 import SideBarCompact from './components/SideBarCompact';
@@ -252,6 +252,11 @@ function App() {
   const [isCompact, setIsCompact] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
+  // CONSTANTE PARA MANEJAR EL ESTADO DEL SEARCHMENU
+  const [isMenuSearchOpen, setIsMenuSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const searchRef = useRef(null);
+
   return (
     <div className="flex h-screen">
       {/* ESCRITORIO */}
@@ -260,6 +265,16 @@ function App() {
           <SideBarCompact 
             onExpand = {() => setIsCompact(false)}
             onNewChat={handleNewChat}
+            onMenuSearchOpen={() => setIsMenuSearchOpen(true)}
+            onMenuSearchClose={() => setIsMenuSearchOpen(false)}
+            isMenuSearchOpen={isMenuSearchOpen}
+            setIsMenuSearchOpen={setIsMenuSearchOpen}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            onChatSelect={handleChatSelect}
+            onDeleteChat={handleDeleteChat}
+            chats={chats}
+            searchRef={searchRef}
             />
         ) : (
           <SideBar 
@@ -269,6 +284,14 @@ function App() {
             onNewChat={handleNewChat}
             onChatSelect={handleChatSelect}
             onDeleteChat={handleDeleteChat}
+            onMenuSearchOpen={() => setIsMenuSearchOpen(true)}
+            onMenuSearchClose={() => setIsMenuSearchOpen(false)}
+            isMenuSearchOpen={isMenuSearchOpen}
+            setIsMenuSearchOpen={setIsMenuSearchOpen}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            searchRef={searchRef}
+            setIsMobileOpen={setIsMobileOpen}
             className="hidden md:flex"
             />
         )}
@@ -286,11 +309,19 @@ function App() {
             <div className='relative z-30 w-64 h-full bg-gray-800'>
               <SideBar 
                 onClose={() => setIsMobileOpen(false)}
+                setIsMobileOpen={setIsMobileOpen}
                 chats={chats}
                 currentChatID={currentChatID}
                 onNewChat={handleNewChat}
                 onChatSelect={handleChatSelect}
                 onDeleteChat={handleDeleteChat}
+                onMenuSearchOpen={() => setIsMenuSearchOpen(true)}
+                onMenuSearchClose={() => setIsMenuSearchOpen(false)}
+                isMenuSearchOpen={isMenuSearchOpen}
+                setIsMenuSearchOpen={setIsMenuSearchOpen}
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                searchRef={searchRef}
                 />
             </div>
           </div>
