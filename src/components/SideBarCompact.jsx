@@ -1,6 +1,26 @@
 import SearchMenu from "./SearchMenu"
+import { useEffect } from "react";
 
 const SideBarCompact = ({onNewChat, isMenuSearchOpen, setIsMenuSearchOpen, onExpand, currentChatId, onMenuSearchClose, onMenuSearchOpen, searchTerm, setSearchTerm, onChatSelect, onDeleteChat, chats, searchRef}) => {
+
+    // Cerrar el menu de busqueda si se da click fuera de el
+    useEffect(() => {
+        const handleClickOutsideSearchModal = (event) => {
+            if (isMenuSearchOpen && searchRef.current && !searchRef.current.contains(event.target)) {
+                setIsMenuSearchOpen(false);
+                setSearchTerm('');
+            }
+        };
+
+        if (isMenuSearchOpen) {
+            document.addEventListener('mousedown', handleClickOutsideSearchModal);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutsideSearchModal);
+        };
+    }, [isMenuSearchOpen]);
+
     return (
         <>
             <div className='items-center flex flex-col gap-1 w-full h-full p-1 border-r border-gray-100 dark:bg-gray-950 dark:text-gray-200 dark:border-gray-700'>
