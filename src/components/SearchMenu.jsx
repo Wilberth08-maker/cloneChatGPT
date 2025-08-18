@@ -11,7 +11,7 @@ const SearchMenu = ({setSearchTerm, onNewChat, onChatSelect, onDeleteChat, chats
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-            <div ref={searchRef} className="bg-[#ffffff] rounded-2xl shadow-lg p-2 h-full w-full md:h-[65%] md:w-1/2 max-w-2xl dark:bg-gray-800 dark:text-gray-200 border border-gray-700 flex flex-col">
+            <div ref={searchRef} className="bg-[#ffffff] md:rounded-2xl shadow-lg p-2 h-full w-full md:h-[65%] md:w-1/2 max-w-2xl dark:bg-gray-800 dark:text-gray-200 border border-gray-700 flex flex-col">
                 <div className="flex p-2 border-b border-gray-200 dark:border-gray-700">
                     <input
                         type="text"
