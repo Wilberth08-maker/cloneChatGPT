@@ -1,8 +1,10 @@
 import SearchMenu from "./SearchMenu"
+import { useDarkMode } from '../context/DarkModeContext';
 import { useEffect } from "react";
 
 const SideBarCompact = ({onNewChat, isMenuSearchOpen, setIsMenuSearchOpen, onExpand, currentChatId, onMenuSearchClose, onMenuSearchOpen, searchTerm, setSearchTerm, onChatSelect, onDeleteChat, chats, searchRef}) => {
 
+    const { darkMode, setDarkMode } = useDarkMode();
     // Cerrar el menu de busqueda si se da click fuera de el
     useEffect(() => {
         const handleClickOutsideSearchModal = (event) => {

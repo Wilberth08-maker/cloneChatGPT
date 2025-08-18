@@ -151,6 +151,7 @@ const SideBar = ({ chats, currentChatId, onNewChat, onChatSelect, onDeleteChat, 
         onMenuSearchClose={onMenuSearchClose}
         onMenuSearchOpen={onMenuSearchOpen}
         setIsMenuSearchOpen={setIsMenuSearchOpen}
+        isMenuSearchOpen={isMenuSearchOpen}
         onNewChat={onNewChat}
         onChatSelect={onChatSelect}
         onDeleteChat={onDeleteChat}
