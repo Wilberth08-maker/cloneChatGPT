@@ -152,7 +152,7 @@ const Chats = ({
                         </svg>
                     </button>
                 </div>
-                <div className={`flex flex-col flex-grow overflow-y-auto p-2 ${messages.length === 0 ? "justify-center items-center pb-5" : "justify-start"} `}>
+                <div className={`mi-div flex flex-col flex-grow overflow-y-auto p-2 ${messages.length === 0 ? "justify-center items-center pb-5" : "justify-start"} `}>
                     <div className={`chat-scroll flex flex-col items-center overflow-y-auto pb-4 p-2 ${messages.length > 0 ? "flex-grow" : "justify-center"} `}>
                         {messages.length === 0 && (
                             <div className="flex flex-col items-center text-center">

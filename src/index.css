@@ -45,6 +45,10 @@ button {
   cursor: pointer;
 }
 
+/* .mi-div {
+  background: linear-gradient(120deg, #ff9ec2, #d0a7ff, #85d7ff, #ffd17f);
+} */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
