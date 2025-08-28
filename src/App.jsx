@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import SideBar from './components/SideBar';
 import Chats from './components/Chats';
 import SideBarCompact from './components/SideBarCompact';
+import AuthModal from './components/AuthModal';
 
 function App() {
 
@@ -13,7 +14,17 @@ function App() {
   const [isLoading, setIsLoading] = useState(false); 
   const [skipNextSync, setSkipNextSync] = useState(false); 
 
+  const [messageCount, setMessageCount] = useState(0);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const isAuthenticated = Boolean(localStorage.getItem('token'));
+
   const API_BASE_URL = 'http://localhost:5000/api';
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setIsBlocked(false);
+    }
+  }, [isAuthenticated]);
   
 
   const fetchChats = useCallback(async () => {
@@ -87,6 +98,23 @@ function App() {
   // Maneja el envío de mensajes
   const handleSendMessage = async () => {
     if (input.trim() === "") return;
+
+    // Maneja el conteo de mensajes y bloqueo si no está autenticado
+    if (isBlocked) return;
+
+    // Verifica si el usuario no está autenticado y ya envió 3 mensajes
+    if (!isAuthenticated && messageCount >= 3) {
+      setIsBlocked(true);
+
+      const authPrompt = {
+        role: 'assistant',
+        content: "🛑 Has alcanzado el límite de mensajes. Para continuar, inicia sesión o regístrate.",
+        authRequired: true
+      };
+
+      setMessages(prev => [...prev, authPrompt]);
+      return;
+    }
     const userMessageContent = input.trim();
     const newUserMessage = { role: 'user', content: userMessageContent };
     // Función para animar texto tipo máquina de escribir
@@ -183,6 +211,9 @@ function App() {
           );
       });
 
+      // Incrementa el contador de mensajes si el usuario no está autenticado
+      setMessageCount(prev => prev + 1);
+
       typeWriterEffect(data.reply, (partialText) => {
         setChats(prevChats => prevChats.map(chat =>
           chat.id === chatIdToUse
@@ -259,6 +290,9 @@ function App() {
 
   return (
     <div className="flex h-screen">
+      {isBlocked && (
+        <AuthModal/>
+        )}
       {/* ESCRITORIO */}
       <div className='hidden md:block'>
         {isCompact ? (
@@ -336,6 +370,7 @@ function App() {
           setIsLoading={setIsLoading}
           handleSendMessage={handleSendMessage}
           onOpenMenu={() => setIsMobileOpen(true)}
+          isBlocked={isBlocked}
         /> 
     </div>
   );
