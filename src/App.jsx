@@ -1,5 +1,9 @@
 import './index.css';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import RoutesIndex from "@/routes/RoutesIndex"
+import { ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css' 
+import {AuthProvider} from "@/context/AuthContext";
 import SideBar from './components/SideBar';
 import Chats from './components/Chats';
 import SideBarCompact from './components/SideBarCompact';
