@@ -16,7 +16,7 @@ export default defineConfig({
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'], // resuelve estás extensiones automáticamente
     },
     server: {
-        port: 3000, // cambia el puerto si quieres 
+        port: 8080, // cambia el puerto si quieres 
         open: true, // abre el navegador automáticamente al iniciar el servidor
         strictPort: true, // Fallará si el puerto está ocupado (evita que elija otro automáticamente)
     },
