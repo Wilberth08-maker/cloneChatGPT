@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useContext, useCallback } from 'react';
+import { createContext, useState, useEffect, useContext, useCallback, useRef } from 'react';
 import { AuthContext } from './AuthContext';
 
 export const ChatContext = createContext();
@@ -276,7 +276,16 @@ export const ChatProvider = ({ children }) => {
         }
     };
 
-    chatProps = {
+    // CONSTANTES PARA MANEJAR EL ESTADO DE LOS SIDEBAR
+    const [isCompact, setIsCompact] = useState(false);
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+    // CONSTANTE PARA MANEJAR EL ESTADO DEL SEARCHMENU
+    const [isMenuSearchOpen, setIsMenuSearchOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const searchRef = useRef(null);
+
+    const chatProps = {
         chats,
         currentChatID,
         messages,
@@ -293,10 +302,18 @@ export const ChatProvider = ({ children }) => {
         handleSendMessage,
         handleNewChat,
         handleChatSelect,
-        handleDeleteChat
+        handleDeleteChat,
+        isCompact,
+        setIsCompact,
+        isMobileOpen,
+        setIsMobileOpen,
+        isMenuSearchOpen,
+        setIsMenuSearchOpen,
+        searchTerm,
+        setSearchTerm,
+        searchRef
     }
 
-    console.log(chats)
     return (
         <ChatContext.Provider value={chatProps}>
             {children}
