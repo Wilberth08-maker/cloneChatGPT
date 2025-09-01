@@ -1,8 +1,12 @@
-import { useDarkMode } from '../context/DarkModeContext';
+import { useDarkMode } from '@/context/DarkModeContext';
+import { useChatContext } from '@/hooks/useChatContext';
 
-const SearchMenu = ({setSearchTerm, onNewChat, onChatSelect, onDeleteChat, chats, searchTerm, searchRef, currentChatId, onMenuSearchClose, setIsMenuSearchOpen, setIsMobileOpen, isMenuSearchOpen}) => {
-    
+const SearchMenu = ({ onMenuSearchClose }) => {
+
     const { darkMode, setDarkMode } = useDarkMode();
+    const {
+        setSearchTerm, handleNewChat, handleChatSelect, handleDeleteChat, chats, searchTerm, searchRef, currentChatId, setIsMenuSearchOpen, setIsMobileOpen } = useChatContext();
+
     // Función para filtrar los chats
     const filteredChats = chats.filter(chat => {
         return chat && chat.title && chat.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -41,7 +45,7 @@ const SearchMenu = ({setSearchTerm, onNewChat, onChatSelect, onDeleteChat, chats
                         setIsMenuSearchOpen(false);
                         setIsMobileOpen(false);
                         setSearchTerm('');
-                        onNewChat();
+                        handleNewChat();
                     }}
                     className="w-full flex items-center justify-between w-full p-2.5 mt-2 rounded-xl text-gray-900 hover:bg-[#ebebeb] transition-colors duration-200 gap-2 dark:text-gray-200 dark:hover:bg-gray-700"
                 >
@@ -60,7 +64,7 @@ const SearchMenu = ({setSearchTerm, onNewChat, onChatSelect, onDeleteChat, chats
                                     className={`flex gap-2 itemList items-center block flex-grow text-left p-2 rounded-xl text-gray-900 transition-colors duration-200 ${currentChatId === chat.id ? 'bg-gray-700' : 'hover:bg-[#ebebeb] dark:text-gray-200 dark:hover:bg-gray-700'
                                         }`}
                                     onClick={() => {
-                                        onChatSelect(chat.id);
+                                        handleChatSelect(chat.id);
                                         setIsMenuSearchOpen(false);
                                         setIsMobileOpen(false);
                                         setSearchTerm('');
@@ -77,7 +81,7 @@ const SearchMenu = ({setSearchTerm, onNewChat, onChatSelect, onDeleteChat, chats
                                     className="ml-2 p-2 rounded-full hover:bg-red-100 text-red-600 transition-colors duration-200 dark:hover:bg-red-700 dark:hover:text-gray-200"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        onDeleteChat(chat.id);
+                                        handleDeleteChat(chat.id);
                                     }}
                                     title="Eliminar chat"
                                 >
