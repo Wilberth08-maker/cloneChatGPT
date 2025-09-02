@@ -57,8 +57,10 @@ export const ChatProvider = ({ children }) => {
     }, [API_BASE_URL, chats.length]);
 
     useEffect(() => {
-        fetchChats();
-    }, [fetchChats]);
+        if (isAuth) {
+            fetchChats();
+        }
+    }, [fetchChats, isAuth]);
 
     // Sincroniza los mensajes del chat actual con el estado local.
     // Si skipNextSync está activo, evita sincronizar innecesariamente una vez.
@@ -257,6 +259,8 @@ export const ChatProvider = ({ children }) => {
         if (!window.confirm('¿Estás seguro de que quieres eliminar este chat?')) {
             return;
         }
+
+        if (!isAuth) return;
 
         try {
             const response = await fetch(`${API_BASE_URL}/chats/${chatIdToDelete}`, {
