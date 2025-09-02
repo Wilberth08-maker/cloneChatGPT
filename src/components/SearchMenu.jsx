@@ -5,7 +5,7 @@ const SearchMenu = ({ onMenuSearchClose }) => {
 
     const { darkMode, setDarkMode } = useDarkMode();
     const {
-        setSearchTerm, handleNewChat, handleChatSelect, handleDeleteChat, chats, searchTerm, searchRef, currentChatId, setIsMenuSearchOpen, setIsMobileOpen } = useChatContext();
+        setSearchTerm, handleNewChat, handleChatSelect, handleDeleteChat, chats, searchTerm, searchRef, currentChatID, setIsMenuSearchOpen, setIsMobileOpen } = useChatContext();
 
     // Función para filtrar los chats
     const filteredChats = chats.filter(chat => {
@@ -61,7 +61,7 @@ const SearchMenu = ({ onMenuSearchClose }) => {
                         filteredChats.map(chat => (
                             <div key={chat.id} className="flex items-center justify-between mb-2">
                                 <button
-                                    className={`flex gap-2 itemList items-center block flex-grow text-left p-2 rounded-xl text-gray-900 transition-colors duration-200 ${currentChatId === chat.id ? 'bg-gray-700' : 'hover:bg-[#ebebeb] dark:text-gray-200 dark:hover:bg-gray-700'
+                                    className={`flex gap-2 itemList items-center block flex-grow text-left p-2 rounded-xl text-gray-900 transition-colors duration-200 ${currentChatID === chat.id ? 'bg-gray-700' : 'hover:bg-[#ebebeb] dark:text-gray-200 dark:hover:bg-gray-700'
                                         }`}
                                     onClick={() => {
                                         handleChatSelect(chat.id);

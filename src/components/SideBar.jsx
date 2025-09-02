@@ -99,8 +99,8 @@ const SideBar = ({ className, onCollapse, onClose, onMenuSearchOpen, onMenuSearc
             <button
               onClick={() => window.open("https://chatgpt.com/g/g-kZ0eYXlJe-scholar-gpt", "_blank")}
               className="itemList flex items-center justify-between w-full p-2 rounded-xl text-gray-900 hover:bg-[#ebebeb] transition-colors duration-200 dark:text-gray-200 dark:hover:bg-gray-800">
-              <div className="flex-shrink-0 w-6 h-6 rounded-full overflow-hidden flex items-center justify-center bg-gray-200 mr-3">
-                <img alt="Scholar GPT Icon" src="https://chatgpt.com/backend-api/estuary/content?id=file-gk3ACPm7Tvy5DHe5aE9fqJ0W&gizmo_id=g-kZ0eYXlJe&ts=487196&p=gpp&cid=1&sig=315ad1977453d8a844dedd0738a2a401f46a4757ce2fb1084d57be1bff820bb4"
+              <div className="flex-shrink-0 w-5 h-5 rounded-full overflow-hidden flex items-center justify-center bg-gray-200 mr-2">
+                <img alt="Scholar GPT Icon" src="./public/scholarGPT.png"
                   className="w-full h-full object-cover" />
               </div>
               <span className="flex-grow text-left">Scholar GPT</span>
@@ -117,7 +117,7 @@ const SideBar = ({ className, onCollapse, onClose, onMenuSearchOpen, onMenuSearc
                 chats.map(chat => (
                   <div key={chat.id} className="flex items-center justify-between mb-2">
                     <button
-                      className={`itemList items-center block flex-grow text-left p-2 rounded-xl text-gray-900 transition-colors duration-200 ${currentChatID === chat.id ? 'bg-gray-700' : 'hover:bg-[#ebebeb] dark:text-gray-200 dark:hover:bg-gray-800'
+                      className={`itemList items-center block flex-grow text-left p-2 rounded-xl text-gray-900 transition-colors duration-200 ${currentChatID === chat.id ? 'bg-gray-200' : 'hover:bg-[#ebebeb] dark:text-gray-200 dark:hover:bg-gray-800'
                         }`}
                       onClick={() => {
                         handleChatSelect(chat.id);
