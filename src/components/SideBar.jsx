@@ -3,12 +3,16 @@ import { useDarkMode } from '../context/DarkModeContext';
 import '../index.css';
 import SearchMenu from './SearchMenu';
 import { useChatContext } from '@/hooks/useChatContext';
+import { useAuthContext } from '@/hooks/useAuthContext';
+import { Link } from 'react-router-dom';
 
 const SideBar = ({ className, onCollapse, onClose, onMenuSearchOpen, onMenuSearchClose, }) => {
 
   const {
     chats, currentChatID, handleNewChat, handleChatSelect, handleDeleteChat, isMenuSearchOpen, setIsMenuSearchOpen, setSearchTerm, searchRef, setIsMobileOpen, isAuth
   } = useChatContext();
+
+  const { userPayload } = useAuthContext();
 
   const { darkMode, setDarkMode } = useDarkMode();
 
@@ -119,7 +123,7 @@ const SideBar = ({ className, onCollapse, onClose, onMenuSearchOpen, onMenuSearc
                 chats.map(chat => (
                   <div key={chat.id} className="flex items-center justify-between mb-2">
                     <button
-                      className={`itemList items-center block flex-grow text-left p-2 rounded-xl text-gray-900 transition-colors duration-200 ${currentChatID === chat.id ? 'bg-gray-200' : 'hover:bg-[#ebebeb] dark:text-gray-200 dark:hover:bg-gray-800'
+                      className={`itemList items-center block flex-grow text-left p-2 rounded-xl text-gray-900 transition-colors duration-200 ${currentChatID === chat.id ? 'bg-[#ebebeb] dark:bg-gray-800 dark:text-gray-200 ' : 'hover:bg-[#ebebeb] dark:text-gray-200 dark:hover:bg-gray-800'
                         }`}
                       onClick={() => {
                         handleChatSelect(chat.id);
@@ -149,6 +153,24 @@ const SideBar = ({ className, onCollapse, onClose, onMenuSearchOpen, onMenuSearc
               )}
             </div>
           </div>
+          {isAuth && (
+            <div className="flex sticky bottom-0 w-full p-2.5 border-t border-gray-100 dark:border-gray-700 bg-[#fafafa] dark:bg-gray-700 upperSideBottom dark:bg-gray-950 dark:text-gray-200 align-center  justify-center items-center">
+              <Link
+                to="/dashboard"
+                className="block text-gray-800 w-full py-2 px-3 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-200 !no-underline flex space-between gap-2">
+                <div className='flex-shrink-0 w-8 h-8 rounded-full overflow-hidden flex items-center justify-center mr-1 object-center'>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 3 24 12" fill="currentColor" className="size-8 w-full h-full object-center text-gray-800 dark:text-gray-200">
+                    <path fillRule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className='align-column'>
+                  <p className='text-base text-gray-800 dark:text-gray-200'>{userPayload.email}</p>
+                  <p className='text-sm text-gray-600 dark-text-gray-400'>gratis</p>
+                </div>
+
+              </Link>
+            </div>
+          )}
         </div>
       </div>
       {/* Menu de busqueda*/}
