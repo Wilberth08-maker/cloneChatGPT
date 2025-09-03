@@ -26,6 +26,7 @@ function AuthProvider({ children }) {
             logout();
         }
     }
+
     //* Función para cerrar sesión
     const logout = () => {
         localStorage.removeItem("token")// eliminar token del localStorage
