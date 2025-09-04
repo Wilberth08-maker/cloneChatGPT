@@ -8,10 +8,12 @@ const AuthContext = createContext();
 function AuthProvider({ children }) {
     const [isAuth, setIsAuth] = useState(false) // ¿Usuario Autenticado?
     const [userPayload, setUserPayload] = useState(null) // Datos decodificados del token 
+    const [authToken, setAuthToken] = useState(localStorage.getItem("token")) // Estado para el token
 
     const login = (token) => {
         try {
             localStorage.setItem("token", token) // guardamos el token en localStorage
+            setAuthToken(token) // Actualizamos el estado del token
             const decode = jwtDecode(token) // decodificamos el payload
             //⏱  Verificar expiración (si "exp" existe y está vencido)
             if (decode.exp && decode.exp * 1000 < Date.now()) {
@@ -59,7 +61,8 @@ function AuthProvider({ children }) {
         isAuth, // ¿Usuario Autenticado?
         userPayload,
         login, // función para iniciar sesión
-        logout
+        logout,
+        authToken // token de autenticación
     }
 
     return (
