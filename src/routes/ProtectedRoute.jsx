@@ -4,7 +4,7 @@ import { useAuthContext } from "@/hooks/useAuthContext"
 
 const ProtectedRoute = ({ children }) => {
     const { isAuth } = useAuthContext(); // ¿Estás Autenticado?
-    return isAuth ? children : <Navigate to="/login" replace />
+    return isAuth ? children : <Navigate to="/" replace />
 }
 
 export default ProtectedRoute
