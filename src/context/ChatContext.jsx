@@ -13,9 +13,16 @@ export const ChatProvider = ({ children }) => {
 
     const [messageCount, setMessageCount] = useState(0);
     const [isBlocked, setIsBlocked] = useState(false);
-    const { isAuth } = useContext(AuthContext);
+    const { isAuth, authToken } = useContext(AuthContext);
 
     const API_BASE_URL = 'http://localhost:5000/api';
+
+    const authHeaders = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`,
+    };
+
+    console.log("Auth Token in ChatContext:", authToken);
 
     useEffect(() => {
         if (isAuth) {
@@ -26,7 +33,11 @@ export const ChatProvider = ({ children }) => {
 
     const fetchChats = useCallback(async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/chats`);
+            const response = await fetch(`${API_BASE_URL}/chats`, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                }
+            });
 
             if (!response.ok) throw new Error('Error al cargar chats');
 
@@ -50,17 +61,21 @@ export const ChatProvider = ({ children }) => {
         } catch (error) {
             console.error("Error al obtener los chats:", error);
             // Si no se pueden cargar los chats, muestra un mensaje de error
-            if (chats.length === 0) {
+            if (chats.length === 0 && isAuth) {
                 setMessages([{ role: 'assistant', content: "No se pudieron cargar los chats existentes." }]);
             }
         }
     }, [API_BASE_URL, chats.length]);
 
     useEffect(() => {
-        if (isAuth) {
+        if (isAuth && authToken) {
             fetchChats();
+            // Esperar que los chats se actualicen
+            setCurrentChatID(null);
+            setMessages([]);
+            setSkipNextSync(false);
         }
-    }, [fetchChats, isAuth]);
+    }, [fetchChats, isAuth, authToken]);
 
     // Sincroniza los mensajes del chat actual con el estado local.
     // Si skipNextSync está activo, evita sincronizar innecesariamente una vez.
@@ -143,7 +158,7 @@ export const ChatProvider = ({ children }) => {
                 try {
                     const response = await fetch(`${API_BASE_URL}/chats`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: authHeaders,
                         body: JSON.stringify({ title: newUserMessage.content.substring(0, 30) + (newUserMessage.content.length > 30 ? '...' : '') }),
                     });
 
@@ -186,7 +201,7 @@ export const ChatProvider = ({ children }) => {
             // 2. Enviar el mensaje del usuario al backend
             const response = await fetch(`${API_BASE_URL}/chat`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: authHeaders,
                 body: JSON.stringify({
                     chatId: chatIdToUse, // Envía el ID del chat
                     messages: messagesForIA // Envía todo el historial
@@ -265,6 +280,9 @@ export const ChatProvider = ({ children }) => {
         try {
             const response = await fetch(`${API_BASE_URL}/chats/${chatIdToDelete}`, {
                 method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                }
             });
 
             if (!response.ok) {
