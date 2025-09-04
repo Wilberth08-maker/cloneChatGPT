@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { useDarkMode } from '../context/DarkModeContext';
 import '../index.css';
 import { useChatContext } from '../hooks/useChatContext';
-import { toast } from 'react-toastify';
-import { useAuthContext } from '../hooks/useAuthContext';
 
 const Chats = ({ onOpenMenu }) => {
 
@@ -14,7 +12,8 @@ const Chats = ({ onOpenMenu }) => {
         setInput,
         isLoading,
         handleSendMessage,
-        isBlocked
+        isBlocked,
+        isAuth
     } = useChatContext();
 
     const messagesEndRef = useRef(null);
@@ -23,16 +22,6 @@ const Chats = ({ onOpenMenu }) => {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { darkMode, setDarkMode } = useDarkMode();
-
-    const { logout, isAuth } = useAuthContext();
-
-    const handleLogout = () => {
-        toast.info("👋 Sesión cerrada correctamente");
-        logout();
-        navigate("/login");
-    };
-
-
 
     // Función para hacer scroll al último mensaje
     useEffect(() => {
@@ -174,13 +163,13 @@ const Chats = ({ onOpenMenu }) => {
                                 <div class="flex gap-1 items-center justify-center">
                                     <Link
                                         to="/login"
-                                        className=" bg-gray-800 py-1 px-4 text-white rounded-3xl text-base font-medium hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition ease-in-out duration-150 !no-underline dark:bg-gray-400 dark:text-gray-800 dark:hover:bg-gray-500 dark:focus:ring-gray-500 dark:border dark:border-gray-200"
+                                        className=" bg-gray-900 py-2 px-4 text-gray-50 hover:text-gray-50 rounded-3xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition ease-in-out duration-150 !no-underline dark:bg-gray-300 dark:text-gray-900   dark:focus:ring-gray-500 dark:border dark:border-gray-200"
                                     >
                                         Iniciar Sesión
                                     </Link>
                                     <Link
                                         to="/signup"
-                                        className=" bg-gray-100 !text-gray-800 py-1 px-4 rounded-3xl text-base font-medium hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50 transition ease-in-out duration-150 border border-gray-300 !no-underline dark:bg-gray-700 dark:!text-gray-200 dark:hover:bg-gray-600 dark:focus:ring-gray-400 dark:border-gray-600"
+                                        className=" bg-gray-100 !text-gray-800 py-2 px-4 rounded-3xl text-base font-medium hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50 transition ease-in-out duration-150 border border-gray-300 !no-underline dark:bg-gray-700 dark:!text-gray-200 dark:hover:bg-gray-600 dark:focus:ring-gray-400 dark:border-gray-600"
                                     >
                                         Suscríbete gratis
                                     </Link>
