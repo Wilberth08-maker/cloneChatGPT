@@ -1,24 +1,26 @@
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuthContext } from "@/hooks/useAuthContext";
+import { useChatContext } from "../hooks/useChatContext";
 
 
 function Dashboard() {
-    const { userPayload } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    // Extraer nombre antes del @
-    const name = userPayload?.email?.split("@")[0] || "Invitado";
-
-    const { logout, isAuth } = useAuthContext();
+    const { logout, userPayload } = useAuthContext();
+    const { setChats, setMessages, setInput } = useChatContext();
 
     const handleLogout = () => {
         toast.info("👋 Sesión cerrada correctamente");
         logout();
+        setChats([]); // Limpiar chats al cerrar sesión
+        setMessages([]); // Limpiar mensajes al cerrar sesión
+        setInput(""); // Limpiar input al cerrar sesión
         navigate("/");
     };
+
+    // Extraer nombre antes del @
+    const name = userPayload?.email?.split("@")[0] || "Invitado";
 
     return (
         <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 h-full w-full align-center justify-center items-center">
