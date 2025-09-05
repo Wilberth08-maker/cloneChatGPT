@@ -12,8 +12,10 @@ export const ChatProvider = ({ children }) => {
     const [skipNextSync, setSkipNextSync] = useState(false);
 
     const [messageCount, setMessageCount] = useState(0);
-    // const [isBlocked, setIsBlocked] = useState(false);
+    const [isBlocked, setIsBlocked] = useState(false);
     const { isAuth, authToken } = useContext(AuthContext);
+
+    const [justCreatedChatId, setJustCreatedChatId] = useState(null);
 
     const API_BASE_URL = 'http://localhost:5000/api';
 
@@ -22,11 +24,11 @@ export const ChatProvider = ({ children }) => {
         Authorization: `Bearer ${authToken}`,
     };
 
-    // useEffect(() => {
-    //     if (isAuth) {
-    //         setIsBlocked(false);
-    //     }
-    // }, [isAuth]);
+    useEffect(() => {
+        if (isAuth) {
+            setIsBlocked(false);
+        }
+    }, [isAuth]);
 
 
     const fetchChats = useCallback(async () => {
@@ -46,8 +48,13 @@ export const ChatProvider = ({ children }) => {
             // Selecciona el primer chat si el chat actual ya no existe
             if (data.length > 0) {
                 setCurrentChatID(prevId => {
-                    // Solo actualiza si el chat actual no está en la lista
-                    if (prevId === null || !data.some(chat => chat.id === prevId)) {
+                    // ✅ Si recién se creó un chat, respétalo
+                    if (justCreatedChatId) {
+                        setJustCreatedChatId(null);
+                        return justCreatedChatId;
+                    }
+                    // ✅ Si el actual ya no existe, fallback al primero
+                    if (!prevId || !data.some(chat => chat.id === prevId)) {
                         return data[0].id;
                     }
                     return prevId;
@@ -63,16 +70,20 @@ export const ChatProvider = ({ children }) => {
                 setMessages([{ role: 'assistant', content: "No se pudieron cargar los chats existentes." }]);
             }
         }
-    }, [API_BASE_URL, chats.length]);
+    }, [API_BASE_URL, authToken, justCreatedChatId]);
 
     useEffect(() => {
         if (isAuth && authToken) {
             fetchChats();
+        } else {
             // Esperar que los chats se actualicen
+            setCurrentChatID(null);
             setMessages([]);
-            setSkipNextSync(false);
+            setChats([]);
+            // setSkipNextSync(false);
         }
-    }, [fetchChats, isAuth, authToken]);
+
+    }, [fetchChats, isAuth, authToken, setCurrentChatID]);
 
     // Sincroniza los mensajes del chat actual con el estado local.
     // Si skipNextSync está activo, evita sincronizar innecesariamente una vez.
@@ -80,12 +91,12 @@ export const ChatProvider = ({ children }) => {
 
         // Si skipNextSync es true, evita la sincronización completa y solo actualiza mensajes una vez, sin sobrescribirlos.
         if (skipNextSync) {
-            setSkipNextSync(true);
+            // setSkipNextSync(false);
 
-            const chat = chats.find(c => c.id === currentChatID);
-            if (chat && chat.messages && chat.messages.some(m => m.content !== '')) {
-                setMessages(chat.messages);
-            }
+            // const chat = chats.find(c => c.id === currentChatID || c.id === justCreatedChatId);
+            // if (chat && chat.messages && chat.messages.some(m => m.content !== '')) {
+            //     setMessages(chat.messages);
+            // }
             return;
         }
 
@@ -97,10 +108,10 @@ export const ChatProvider = ({ children }) => {
 
         const chat = chats.find(c => c.id === currentChatID);
 
-        if (!chat || !chat.messages) return;
+        if (!chat) return;
 
         // Carga los mensajes del chat actual
-        setMessages(chat.messages);
+        setMessages(chat.messages || []);
 
     }, [currentChatID, chats, skipNextSync]);
 
@@ -110,22 +121,22 @@ export const ChatProvider = ({ children }) => {
     const handleSendMessage = async () => {
         if (input.trim() === "") return;
 
-        // // Maneja el conteo de mensajes y bloqueo si no está autenticado
-        // if (isBlocked) return;
+        // Maneja el conteo de mensajes y bloqueo si no está autenticado
+        if (isBlocked) return;
 
-        // // Verifica si el usuario no está autenticado y ya envió 3 mensajes
-        // if (!isAuth && messageCount >= 3) {
-        //     setIsBlocked(true);
+        // Verifica si el usuario no está autenticado y ya envió 3 mensajes
+        if (!isAuth && messageCount >= 3) {
+            setIsBlocked(true);
 
-        //     const authPrompt = {
-        //         role: 'assistant',
-        //         content: "🛑 Has alcanzado el límite de mensajes. Para continuar, inicia sesión o regístrate.",
-        //         authRequired: true
-        //     };
+            const authPrompt = {
+                role: 'assistant',
+                content: "🛑 Has alcanzado el límite de mensajes. Para continuar, inicia sesión o regístrate.",
+                authRequired: true
+            };
 
-        //     setMessages(prev => [...prev, authPrompt]);
-        //     return;
-        // }
+            setMessages(prev => [...prev, authPrompt]);
+            return;
+        }
         const userMessageContent = input.trim();
         const newUserMessage = { role: 'user', content: userMessageContent };
         // Función para animar texto tipo máquina de escribir
@@ -169,14 +180,20 @@ export const ChatProvider = ({ children }) => {
 
                         newChatCreated = true;
 
+                        setJustCreatedChatId(chatIdToUse);
+
+                        const initialMessage = [newUserMessage, { role: 'assistant', content: '' }];
+
                         // Añade el nuevo chat en la parte superior de la lista, 
                         // con el mensaje del usuario y una respuesta vacía del asistente.
                         setChats(prevChats => [{
                             ...newChat,
-                            messages: [newUserMessage, { role: 'assistant', content: '' }]
+                            messages: initialMessage,
                         }, ...prevChats]);
 
                         setCurrentChatID(chatIdToUse);
+
+                        setMessages(initialMessage);
                     } else {
                         // 👤 Invitado → crea chat temporal solo en frontend
                         chatIdToUse = `guest-${Date.now()}`;
@@ -191,6 +208,7 @@ export const ChatProvider = ({ children }) => {
                         };
 
                         setChats(prevChats => [tempChat, ...prevChats]);
+
                         setCurrentChatID(chatIdToUse);
                     }
                 } catch (error) {
@@ -203,6 +221,24 @@ export const ChatProvider = ({ children }) => {
                     });
                     return;
                 }
+            }
+
+            // 👇 AÑADE ESTO AQUÍ (optimistic update para chats existentes)
+            if (!newChatCreated) {
+                setChats(prevChats =>
+                    prevChats.map(chat =>
+                        chat.id === chatIdToUse
+                            ? {
+                                ...chat,
+                                messages: [
+                                    ...(chat.messages || []),
+                                    newUserMessage,
+                                    { role: 'assistant', content: '' } // placeholder
+                                ]
+                            }
+                            : chat
+                    )
+                );
             }
             // 2. Prepara el mensaje del usuario para enviar a la IA
             // Si es un nuevo chat, solo envía el mensaje del usuario
@@ -267,6 +303,7 @@ export const ChatProvider = ({ children }) => {
             await fetchChats();
         } finally {
             setIsLoading(false);
+            setSkipNextSync(false);
         }
     };
 
@@ -327,7 +364,7 @@ export const ChatProvider = ({ children }) => {
         messages,
         input,
         isLoading,
-        // isBlocked,
+        isBlocked,
         isAuth,
         messageCount,
         setChats,
