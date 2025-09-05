@@ -160,7 +160,7 @@ const Chats = ({ onOpenMenu }) => {
                             </>
                         ) : (
                             <>
-                                <div class="flex gap-1 items-center justify-center">
+                                <div className="flex gap-1 items-center justify-center">
                                     <Link
                                         to="/login"
                                         className=" bg-gray-900 py-2 px-4 text-gray-50 hover:text-gray-50 rounded-3xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition ease-in-out duration-150 !no-underline dark:bg-gray-300 dark:text-gray-900   dark:focus:ring-gray-500 dark:border dark:border-gray-200"
@@ -216,7 +216,7 @@ const Chats = ({ onOpenMenu }) => {
                                 <textarea
                                     ref={textareaRef}
                                     type="text"
-                                    disabled={isBlocked}
+                                    // {/*disabled={isBlocked}*/}
                                     rows="1"
                                     placeholder={isBlocked ? "Debes iniciar sesión para continuar" : "Pregunta lo que quieras"}
                                     className="chat-scroll w-full py-2 px-3 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none resize-none min-h-[50px] max-h-[156px] overflow-y-auto leading-6 text-base box-border cursor-auto dark:bg-gray-900 dark:text-gray-50"

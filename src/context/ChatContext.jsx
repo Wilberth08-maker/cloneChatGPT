@@ -12,7 +12,7 @@ export const ChatProvider = ({ children }) => {
     const [skipNextSync, setSkipNextSync] = useState(false);
 
     const [messageCount, setMessageCount] = useState(0);
-    const [isBlocked, setIsBlocked] = useState(false);
+    // const [isBlocked, setIsBlocked] = useState(false);
     const { isAuth, authToken } = useContext(AuthContext);
 
     const API_BASE_URL = 'http://localhost:5000/api';
@@ -22,11 +22,11 @@ export const ChatProvider = ({ children }) => {
         Authorization: `Bearer ${authToken}`,
     };
 
-    useEffect(() => {
-        if (isAuth) {
-            setIsBlocked(false);
-        }
-    }, [isAuth]);
+    // useEffect(() => {
+    //     if (isAuth) {
+    //         setIsBlocked(false);
+    //     }
+    // }, [isAuth]);
 
 
     const fetchChats = useCallback(async () => {
@@ -110,22 +110,22 @@ export const ChatProvider = ({ children }) => {
     const handleSendMessage = async () => {
         if (input.trim() === "") return;
 
-        // Maneja el conteo de mensajes y bloqueo si no está autenticado
-        if (isBlocked) return;
+        // // Maneja el conteo de mensajes y bloqueo si no está autenticado
+        // if (isBlocked) return;
 
-        // Verifica si el usuario no está autenticado y ya envió 3 mensajes
-        if (!isAuth && messageCount >= 3) {
-            setIsBlocked(true);
+        // // Verifica si el usuario no está autenticado y ya envió 3 mensajes
+        // if (!isAuth && messageCount >= 3) {
+        //     setIsBlocked(true);
 
-            const authPrompt = {
-                role: 'assistant',
-                content: "🛑 Has alcanzado el límite de mensajes. Para continuar, inicia sesión o regístrate.",
-                authRequired: true
-            };
+        //     const authPrompt = {
+        //         role: 'assistant',
+        //         content: "🛑 Has alcanzado el límite de mensajes. Para continuar, inicia sesión o regístrate.",
+        //         authRequired: true
+        //     };
 
-            setMessages(prev => [...prev, authPrompt]);
-            return;
-        }
+        //     setMessages(prev => [...prev, authPrompt]);
+        //     return;
+        // }
         const userMessageContent = input.trim();
         const newUserMessage = { role: 'user', content: userMessageContent };
         // Función para animar texto tipo máquina de escribir
@@ -327,7 +327,7 @@ export const ChatProvider = ({ children }) => {
         messages,
         input,
         isLoading,
-        isBlocked,
+        // isBlocked,
         isAuth,
         messageCount,
         setChats,
