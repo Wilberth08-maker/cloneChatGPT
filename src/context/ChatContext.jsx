@@ -24,13 +24,6 @@ export const ChatProvider = ({ children }) => {
         Authorization: `Bearer ${authToken}`,
     };
 
-    useEffect(() => {
-        if (isAuth) {
-            setIsBlocked(false);
-        }
-    }, [isAuth]);
-
-
     const fetchChats = useCallback(async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/chats`, {
@@ -45,15 +38,15 @@ export const ChatProvider = ({ children }) => {
 
             setChats(data);
 
-            // Selecciona el primer chat si el chat actual ya no existe
+            // Seleccionar el primer chat si el chat actual ya no existe
             if (data.length > 0) {
                 setCurrentChatID(prevId => {
-                    // ✅ Si recién se creó un chat, respétalo
+                    // respetar chat recien creado
                     if (justCreatedChatId) {
                         setJustCreatedChatId(null);
                         return justCreatedChatId;
                     }
-                    // ✅ Si el actual ya no existe, fallback al primero
+                    // Si el actual ya no existe, fallback al primero
                     if (!prevId || !data.some(chat => chat.id === prevId)) {
                         return data[0].id;
                     }
@@ -65,7 +58,7 @@ export const ChatProvider = ({ children }) => {
             }
         } catch (error) {
             console.error("Error al obtener los chats:", error);
-            // Si no se pueden cargar los chats, muestra un mensaje de error
+            // Si no se pueden cargar los chats, mostrar un mensaje de error
             if (chats.length === 0 && isAuth) {
                 setMessages([{ role: 'assistant', content: "No se pudieron cargar los chats existentes." }]);
             }
@@ -74,13 +67,16 @@ export const ChatProvider = ({ children }) => {
 
     useEffect(() => {
         if (isAuth && authToken) {
+            setIsBlocked(false);
+            setCurrentChatID(null);
+            setJustCreatedChatId(null);
+
             fetchChats();
         } else {
             // Esperar que los chats se actualicen
             setCurrentChatID(null);
             setMessages([]);
             setChats([]);
-            // setSkipNextSync(false);
         }
 
     }, [fetchChats, isAuth, authToken, setCurrentChatID]);
@@ -90,15 +86,7 @@ export const ChatProvider = ({ children }) => {
     useEffect(() => {
 
         // Si skipNextSync es true, evita la sincronización completa y solo actualiza mensajes una vez, sin sobrescribirlos.
-        if (skipNextSync) {
-            // setSkipNextSync(false);
-
-            // const chat = chats.find(c => c.id === currentChatID || c.id === justCreatedChatId);
-            // if (chat && chat.messages && chat.messages.some(m => m.content !== '')) {
-            //     setMessages(chat.messages);
-            // }
-            return;
-        }
+        if (skipNextSync) return;
 
         // Si no hay un chat actual limpia los mensajes
         if (!currentChatID) {
@@ -223,7 +211,7 @@ export const ChatProvider = ({ children }) => {
                 }
             }
 
-            // 👇 AÑADE ESTO AQUÍ (optimistic update para chats existentes)
+            // Optimistic UI Update: Actualiza el chat localmente antes de la respuesta del backend
             if (!newChatCreated) {
                 setChats(prevChats =>
                     prevChats.map(chat =>
@@ -278,6 +266,7 @@ export const ChatProvider = ({ children }) => {
             // Incrementa el contador de mensajes si el usuario no está autenticado
             setMessageCount(prev => prev + 1);
 
+            // Animación de escritura para la respuesta de la IA
             typeWriterEffect(data.reply, (partialText) => {
                 setChats(prevChats => prevChats.map(chat =>
                     chat.id === chatIdToUse
