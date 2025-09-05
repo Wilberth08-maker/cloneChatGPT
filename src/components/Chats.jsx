@@ -4,6 +4,8 @@ import { useDarkMode } from '../context/DarkModeContext';
 import '../index.css';
 import { useChatContext } from '../hooks/useChatContext';
 import { useAuthContext } from '../hooks/useAuthContext';
+import ReactMarkdown from 'react-markdown';
+
 
 const Chats = ({ onOpenMenu }) => {
 
@@ -211,7 +213,30 @@ const Chats = ({ onOpenMenu }) => {
                                                 className={`p-2.5 rounded-3xl ${msg.role === 'user' ? 'max-w-[70%] bg-[#f5f5f5] text-black dark:text-gray-200 dark:bg-gray-800 ' : 'w-full text-black dark:text-gray-200'
                                                     } whitespace-pre-wrap break-words`}>
                                                 {msg.content ? (
-                                                    <span className='p-2 items-center block '>{msg.content}</span>
+                                                    msg.role === 'assistant' ? (
+                                                        <ReactMarkdown
+                                                            className="prose dark:prose-invert max-w-none"
+                                                            components={{
+                                                                code: ({ inline, className, children }) =>
+                                                                    inline ? (
+                                                                        <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">{children}</code>
+                                                                    ) : (
+                                                                        <pre className="bg-gray-200 dark:bg-gray-700 p-2 rounded overflow-x-auto">
+                                                                            <code className={className}>{children}</code>
+                                                                        </pre>
+                                                                    ),
+                                                                a: ({ href, children }) => (
+                                                                    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                                                                        {children}
+                                                                    </a>
+                                                                ),
+                                                            }}
+                                                        >
+                                                            {msg.content}
+                                                        </ReactMarkdown>
+                                                    ) : (
+                                                        <span className="p-2 items-center block">{msg.content}</span>
+                                                    )
                                                 ) : isLoading && msg.role === 'assistant' && index === messages.length - 1 ? (
                                                     <div className="ml-2 w-3.5 h-3.5 bg-gray-900 rounded-full animate-pulse dark:bg-gray-200"></div>
                                                 ) : null}
