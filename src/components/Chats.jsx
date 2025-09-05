@@ -5,6 +5,8 @@ import '../index.css';
 import { useChatContext } from '../hooks/useChatContext';
 import { useAuthContext } from '../hooks/useAuthContext';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 
 const Chats = ({ onOpenMenu }) => {
@@ -214,26 +216,35 @@ const Chats = ({ onOpenMenu }) => {
                                                     } whitespace-pre-wrap break-words`}>
                                                 {msg.content ? (
                                                     msg.role === 'assistant' ? (
-                                                        <ReactMarkdown
-                                                            className="prose dark:prose-invert max-w-none"
-                                                            components={{
-                                                                code: ({ inline, className, children }) =>
-                                                                    inline ? (
-                                                                        <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">{children}</code>
-                                                                    ) : (
-                                                                        <pre className="bg-gray-200 dark:bg-gray-700 p-2 rounded overflow-x-auto">
-                                                                            <code className={className}>{children}</code>
-                                                                        </pre>
+                                                        <div className="prose dark:prose-invert max-w-none">
+                                                            <ReactMarkdown
+                                                                remarkPlugins={[remarkGfm]}
+                                                                rehypePlugins={[rehypeRaw]}
+                                                                components={{
+                                                                    code: ({ inline, className, children }) =>
+                                                                        inline ? (
+                                                                            <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">{children}</code>
+                                                                        ) : (
+                                                                            <pre className="bg-gray-200 dark:bg-gray-700 p-2 rounded overflow-x-auto">
+                                                                                <code className={className}>{children}</code>
+                                                                            </pre>
+                                                                        ),
+                                                                    a: ({ href, children }) => (
+                                                                        <a
+                                                                            href={href}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className="text-blue-500 underline"
+                                                                        >
+                                                                            {children}
+                                                                        </a>
                                                                     ),
-                                                                a: ({ href, children }) => (
-                                                                    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-                                                                        {children}
-                                                                    </a>
-                                                                ),
-                                                            }}
-                                                        >
-                                                            {msg.content}
-                                                        </ReactMarkdown>
+                                                                }}
+                                                            >
+                                                                {msg.content}
+                                                            </ReactMarkdown>
+                                                        </div>
+
                                                     ) : (
                                                         <span className="p-2 items-center block">{msg.content}</span>
                                                     )
