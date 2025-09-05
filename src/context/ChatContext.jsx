@@ -22,8 +22,6 @@ export const ChatProvider = ({ children }) => {
         Authorization: `Bearer ${authToken}`,
     };
 
-    console.log("Auth Token in ChatContext:", authToken);
-
     useEffect(() => {
         if (isAuth) {
             setIsBlocked(false);
@@ -71,7 +69,6 @@ export const ChatProvider = ({ children }) => {
         if (isAuth && authToken) {
             fetchChats();
             // Esperar que los chats se actualicen
-            setCurrentChatID(null);
             setMessages([]);
             setSkipNextSync(false);
         }
@@ -156,29 +153,46 @@ export const ChatProvider = ({ children }) => {
             // 1. Si no hay chat seleccionado, crea uno nuevo
             if (!chatIdToUse) {
                 try {
-                    const response = await fetch(`${API_BASE_URL}/chats`, {
-                        method: 'POST',
-                        headers: authHeaders,
-                        body: JSON.stringify({ title: newUserMessage.content.substring(0, 30) + (newUserMessage.content.length > 30 ? '...' : '') }),
-                    });
+                    if (isAuth) {
+                        const response = await fetch(`${API_BASE_URL}/chats`, {
+                            method: 'POST',
+                            headers: authHeaders,
+                            body: JSON.stringify({ title: newUserMessage.content.substring(0, 30) + (newUserMessage.content.length > 30 ? '...' : '') }),
+                        });
 
-                    if (!response.ok) throw new Error('Error al crear nuevo chat en backend');
+                        if (!response.ok) throw new Error('Error al crear nuevo chat en backend');
 
-                    const newChat = await response.json();
+                        const newChat = await response.json();
 
-                    // Asigna el ID del nuevo chat
-                    chatIdToUse = newChat.id;
+                        // Asigna el ID del nuevo chat
+                        chatIdToUse = newChat.id;
 
-                    newChatCreated = true;
+                        newChatCreated = true;
 
-                    // Añade el nuevo chat en la parte superior de la lista, 
-                    // con el mensaje del usuario y una respuesta vacía del asistente.
-                    setChats(prevChats => [{
-                        ...newChat,
-                        messages: [newUserMessage, { role: 'assistant', content: '' }]
-                    }, ...prevChats]);
+                        // Añade el nuevo chat en la parte superior de la lista, 
+                        // con el mensaje del usuario y una respuesta vacía del asistente.
+                        setChats(prevChats => [{
+                            ...newChat,
+                            messages: [newUserMessage, { role: 'assistant', content: '' }]
+                        }, ...prevChats]);
 
-                    setCurrentChatID(chatIdToUse);
+                        setCurrentChatID(chatIdToUse);
+                    } else {
+                        // 👤 Invitado → crea chat temporal solo en frontend
+                        chatIdToUse = `guest-${Date.now()}`;
+                        newChatCreated = true;
+
+                        const tempChat = {
+                            id: chatIdToUse,
+                            title: newUserMessage.content.substring(0, 30) + (newUserMessage.content.length > 30 ? '...' : ''),
+                            messages: [newUserMessage, { role: 'assistant', content: '' }],
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString(),
+                        };
+
+                        setChats(prevChats => [tempChat, ...prevChats]);
+                        setCurrentChatID(chatIdToUse);
+                    }
                 } catch (error) {
                     console.error("Error creando nuevo chat:", error);
                     setIsLoading(false);
