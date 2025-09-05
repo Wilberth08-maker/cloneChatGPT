@@ -3,8 +3,15 @@ import { Link } from 'react-router-dom';
 import { useDarkMode } from '../context/DarkModeContext';
 import '../index.css';
 import { useChatContext } from '../hooks/useChatContext';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const Chats = ({ onOpenMenu }) => {
+
+    const { logout, userPayload } = useAuthContext();
+
+    // Extraer nombre antes del @
+    const name = userPayload?.email?.split("@")[0] || "Invitado";
+
 
     const {
         messages,
@@ -181,9 +188,16 @@ const Chats = ({ onOpenMenu }) => {
                         <div className={`chat-scroll flex flex-col items-center overflow-y-auto pb-4 p-2 ${messages.length > 0 ? "flex-grow" : "justify-center"} `}>
                             {messages.length === 0 && (
                                 <div className="flex flex-col items-center text-center">
-                                    <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-300">
-                                        Hola. ¿Listo para empezar?
-                                    </h1>
+                                    {isAuth ? (
+                                        <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-300">
+                                            Hola, <Link to="/dashboard" className="text-blue-600 hover:underline">{name}</Link>. ¿Listo para empezar?
+                                        </h1>
+                                    ) : (
+                                        <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-300">
+                                            Hola. ¿Listo para empezar?
+                                        </h1>
+                                    )}
+
                                 </div>
                             )}
 
