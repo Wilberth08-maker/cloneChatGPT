@@ -2,8 +2,14 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import "./message-content.scss";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useDarkMode } from "./DarkModeContext";
+
 
 const MessageContent = ({ role, content, isLoading, isLast }) => {
+    const { darkMode, setDarkMode } = useDarkMode();
     return (
         <div className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}>
             <div
@@ -19,14 +25,22 @@ const MessageContent = ({ role, content, isLoading, isLast }) => {
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[rehypeRaw]}
                                 components={{
-                                    code: ({ inline, className, children }) =>
-                                        inline ? (
-                                            <code className="message__inline-code">{children}</code>
+                                    code({ node, inline, className, children, ...props }) {
+                                        const match = /language-(\w+)/.exec(className || '');
+                                        return !inline && match ? (
+                                            <SyntaxHighlighter
+                                                language={match[1]}
+                                                style={darkMode ? dracula : oneLight}
+                                                PreTag="div"
+                                                className="message__code-block"
+                                                {...props}
+                                            >
+                                                {String(children).replace(/\n$/, '')}
+                                            </SyntaxHighlighter>
                                         ) : (
-                                            <pre className="message__code-block dark:text-gray-100 dark:bg-gray-950">
-                                                <code className={className}>{children}</code>
-                                            </pre>
-                                        ),
+                                            <code className="message__inline-code bg-gray-200 dark:bg-gray-700 dark:text-gray-200">{children}</code>
+                                        );
+                                    },
                                     a: ({ href, children }) => (
                                         <a
                                             href={href}
