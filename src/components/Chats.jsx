@@ -4,7 +4,7 @@ import { useDarkMode } from '../context/DarkModeContext';
 import '../index.css';
 import { useChatContext } from '../hooks/useChatContext';
 import { useAuthContext } from '../hooks/useAuthContext';
-import MessageContext from '../context/messageContext';
+import MessageContent from '../context/MessageContent';
 
 
 
@@ -207,7 +207,7 @@ const Chats = ({ onOpenMenu }) => {
                             {messages.length > 0 && (
                                 <div className="w-full max-w-3xl space-y-4">
                                     {messages.map((msg, index) => (
-                                        <MessageContext
+                                        <MessageContent
                                             key={index}
                                             role={msg.role}
                                             content={msg.content}

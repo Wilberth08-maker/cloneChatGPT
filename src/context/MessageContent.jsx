@@ -10,6 +10,7 @@ import { useDarkMode } from "./DarkModeContext";
 
 
 const MessageContent = React.memo(({ role, content, isLoading, isLast }) => {
+    console
     const { darkMode, setDarkMode } = useDarkMode();
     return (
         <div className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}>
