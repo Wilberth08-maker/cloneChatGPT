@@ -14,6 +14,8 @@ export const ChatProvider = ({ children }) => {
     const [messageCount, setMessageCount] = useState(0);
     const [isBlocked, setIsBlocked] = useState(false);
     const { isAuth, authToken } = useContext(AuthContext);
+    const [pendingText, setPendingText] = useState("");
+    const [streamingIndex, setStreamingIndex] = useState(0);
 
     const [justCreatedChatId, setJustCreatedChatId] = useState(null);
 
@@ -104,6 +106,36 @@ export const ChatProvider = ({ children }) => {
     }, [currentChatID, chats, skipNextSync]);
 
 
+    useEffect(() => {
+        if (!pendingText) return;
+
+        const words = pendingText.split(" ");
+        let index = 0;
+
+        const interval = setInterval(() => {
+            index += 2;
+            if (index > words.length) index = words.length;
+            setStreamingIndex(index);
+            setChats(prevChats =>
+                prevChats.map(chat =>
+                    chat.id === currentChatID
+                        ? {
+                            ...chat,
+                            messages: chat.messages.map((msg, i) =>
+                                i === chat.messages.length - 1
+                                    ? { ...msg, content: words.slice(0, index).join(" ") + (index < words.length ? " " : "") }
+                                    : msg
+                            )
+                        }
+                        : chat
+                )
+            );
+
+            if (index >= words.length) clearInterval(interval);
+        }, 70);
+
+        return () => clearInterval(interval);
+    }, [pendingText, currentChatID]);
 
     // Maneja el envío de mensajes
     const handleSendMessage = async () => {
@@ -127,17 +159,6 @@ export const ChatProvider = ({ children }) => {
         }
         const userMessageContent = input.trim();
         const newUserMessage = { role: 'user', content: userMessageContent };
-        // Función para animar texto tipo máquina de escribir
-        const typeWriterEffect = (fullText, callback) => {
-            let index = 0;
-            const interval = setInterval(() => {
-                callback(fullText.slice(0, index + 1));
-                index++;
-                if (index === fullText.length) {
-                    clearInterval(interval);
-                }
-            }, 10); // velocidad en ms
-        };
 
         // Agrega el mensaje del usuario y una respuesta vacía del asistente.
         setMessages(prevMessages => [...prevMessages, newUserMessage, { role: 'assistant', content: '' }]);
@@ -252,13 +273,12 @@ export const ChatProvider = ({ children }) => {
             }
 
             const data = await response.json();
-            const aiMessage = { role: 'assistant', content: data.reply };
 
             //Actualizar el estado 'chats' directamente con la respuesta de la IA.
             setChats(prevChats => {
                 return prevChats.map(chat =>
                     chat.id === chatIdToUse
-                        ? { ...chat, messages: [...messagesForIA, aiMessage], updatedAt: new Date().toISOString() }
+                        ? { ...chat, messages: [...messagesForIA, { role: "assistant", content: "" }], updatedAt: new Date().toISOString() }
                         : chat
                 );
             });
@@ -266,21 +286,8 @@ export const ChatProvider = ({ children }) => {
             // Incrementa el contador de mensajes si el usuario no está autenticado
             setMessageCount(prev => prev + 1);
 
-            // Animación de escritura para la respuesta de la IA
-            typeWriterEffect(data.reply, (partialText) => {
-                setChats(prevChats => prevChats.map(chat =>
-                    chat.id === chatIdToUse
-                        ? {
-                            ...chat,
-                            messages: chat.messages.map((msg, i) =>
-                                i === chat.messages.length - 1
-                                    ? { ...msg, content: partialText }
-                                    : msg
-                            )
-                        }
-                        : chat
-                ));
-            });
+            setPendingText(data.reply);
+            setStreamingIndex(0);
 
         } catch (error) {
             console.error("Error al comunicarse con la IA o guardar chat:", error);
