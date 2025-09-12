@@ -1,3 +1,4 @@
+import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -8,7 +9,7 @@ import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useDarkMode } from "./DarkModeContext";
 
 
-const MessageContent = ({ role, content, isLoading, isLast }) => {
+const MessageContent = React.memo(({ role, content, isLoading, isLast }) => {
     const { darkMode, setDarkMode } = useDarkMode();
     return (
         <div className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}>
@@ -65,6 +66,6 @@ const MessageContent = ({ role, content, isLoading, isLast }) => {
             </div>
         </div>
     );
-};
+});
 
 export default MessageContent;
