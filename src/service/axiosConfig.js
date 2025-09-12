@@ -15,7 +15,6 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-    console.log("Token usado en petición:", token); // 👈 Verifica si está presente
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

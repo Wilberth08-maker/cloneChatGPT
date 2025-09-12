@@ -15,7 +15,6 @@ const Login = () => {
     const { login } = useAuthContext();
 
     const onSubmit = async (data) => {
-        console.log("datos a enviar:", data);
         try {
             // esperamos a que el servicio de login se resuelva
             const response = await loginUserService(data);

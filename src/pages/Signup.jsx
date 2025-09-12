@@ -9,7 +9,6 @@ const Signup = () => {
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        console.log("datos a enviar:", data)
         try {
             const response = await registerUserService(data);
             if (response.status === 201) {
