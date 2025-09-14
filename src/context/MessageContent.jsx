@@ -10,13 +10,12 @@ import { useDarkMode } from "./DarkModeContext";
 
 
 const MessageContent = React.memo(({ role, content, isLoading, isLast }) => {
-    console
     const { darkMode, setDarkMode } = useDarkMode();
     return (
         <div className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}>
             <div
                 className={`message__bubble p-2.5 rounded-3xl ${role === "user"
-                    ? "message__user dark:text-gray-200 dark:bg-gray-800"
+                    ? "message__user dark:text-gray-200 dark:bg-gray-800 mt-4"
                     : "message__assistant dark:text-gray-200"
                     }`}
             >
