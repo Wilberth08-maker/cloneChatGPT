@@ -1,8 +1,6 @@
 //* 1) importar axios
 import axios from "axios";
 
-console.log("baseURL", import.meta.env.VITE_API_BASE_URL);
-
 //* 2) crear nuestra instancia de axios
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -30,11 +28,10 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error.response?.status;
-    const url = error.config?.url;
-    const method = error.config?.method?.toUpperCase();
-    const backendMessage = error.response?.data?.message;
+    const backendMessage =
+      error.response?.data?.message || error.response?.data?.error || error.response?.data?.msg;
 
-    let customMessage = `Error en ${method} ${url} – `;
+    let customMessage = "";
 
     if (status) {
       customMessage += `Código ${status}. `;
