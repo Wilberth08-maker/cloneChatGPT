@@ -23,7 +23,8 @@ const Chats = ({ onOpenMenu }) => {
         isLoading,
         handleSendMessage,
         isBlocked,
-        isAuth
+        isAuth,
+        getBlockCountdown
     } = useChatContext();
 
     const messagesEndRef = useRef(null);
@@ -229,7 +230,7 @@ const Chats = ({ onOpenMenu }) => {
                                     type="text"
                                     disabled={isBlocked}
                                     rows="1"
-                                    placeholder={isBlocked ? "Debes iniciar sesión para continuar" : "Pregunta lo que quieras"}
+                                    placeholder={isBlocked ? `Debes iniciar sesión para continuar. ${getBlockCountdown() || ""}` : "Pregunta lo que quieras"}
                                     className="chat-scroll w-full py-2 px-3 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none resize-none min-h-[50px] max-h-[156px] overflow-y-auto leading-6 text-base box-border cursor-auto dark:bg-gray-900 dark:text-gray-50"
                                     value={input}
                                     onChange={handleInputChange}
