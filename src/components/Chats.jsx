@@ -170,7 +170,7 @@ const Chats = ({ onOpenMenu }) => {
                             </>
                         ) : (
                             <>
-                                <div className="flex gap-1 items-center justify-center">
+                                <div className="gap-1 items-center justify-center hidden md:flex">
                                     <Link
                                         to="/login"
                                         className=" bg-gray-900 py-2 px-4 text-gray-50 hover:text-gray-50 rounded-3xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition ease-in-out duration-150 !no-underline dark:bg-gray-300 dark:text-gray-900   dark:focus:ring-gray-500 dark:border dark:border-gray-200"
