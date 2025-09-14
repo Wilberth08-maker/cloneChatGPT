@@ -11,6 +11,7 @@ import MessageContent from '../context/MessageContent';
 const Chats = ({ onOpenMenu }) => {
 
     const { logout, userPayload } = useAuthContext();
+    const [blockCountdown, setBlockCountdown] = useState("");
 
     // Extraer nombre antes del @
     const name = userPayload?.email?.split("@")[0] || "Invitado";
@@ -24,7 +25,8 @@ const Chats = ({ onOpenMenu }) => {
         handleSendMessage,
         isBlocked,
         isAuth,
-        getBlockCountdown
+        getBlockCountdown,
+        setIsBlocked
     } = useChatContext();
 
     const messagesEndRef = useRef(null);
@@ -81,6 +83,27 @@ const Chats = ({ onOpenMenu }) => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isMenuOpen]);
+
+    // Efecto para actualizar el countdown cada 5 minutos si está bloqueado
+    useEffect(() => {
+        if (!isBlocked) return;
+
+        const updateCountdown = () => {
+            const countdown = getBlockCountdown();
+            if (!countdown || countdown.remainingMs <= 0) {
+                setIsBlocked(false);
+                localStorage.removeItem("guestBlockedUntil");
+                setBlockCountdown("");
+                return;
+            }
+            setBlockCountdown(countdown.text);
+        };
+
+        updateCountdown(); // inicial
+        const interval = setInterval(updateCountdown, 5 * 60 * 1000); // cada 5 minutos
+
+        return () => clearInterval(interval);
+    }, [isBlocked]);
 
 
 
@@ -230,7 +253,7 @@ const Chats = ({ onOpenMenu }) => {
                                     type="text"
                                     disabled={isBlocked}
                                     rows="1"
-                                    placeholder={isBlocked ? `Debes iniciar sesión para continuar. ${getBlockCountdown() || ""}` : "Pregunta lo que quieras"}
+                                    placeholder={isBlocked ? `Debes iniciar sesión para continuar. ${blockCountdown}` : "Pregunta lo que quieras"}
                                     className="chat-scroll w-full py-2 px-3 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none resize-none min-h-[50px] max-h-[156px] overflow-y-auto leading-6 text-base box-border cursor-auto dark:bg-gray-900 dark:text-gray-50"
                                     value={input}
                                     onChange={handleInputChange}

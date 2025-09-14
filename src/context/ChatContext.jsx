@@ -53,7 +53,10 @@ export const ChatProvider = ({ children }) => {
         const hours = Math.floor(minutes / 60);
         const mins = minutes % 60;
 
-        return `Vuelve en ${hours}h ${mins}min`;
+        return {
+            text: `Vuelve en ${hours}h ${mins}min`,
+            remainingMs,
+        };
     };
 
     const fetchChats = useCallback(async () => {
@@ -190,6 +193,8 @@ export const ChatProvider = ({ children }) => {
                 content: "🛑 Has alcanzado el límite de mensajes. Para continuar, inicia sesión o regístrate.",
                 authRequired: true
             };
+
+            setInput("");
 
             setMessages(prev => [...prev, authPrompt]);
             return;
@@ -404,6 +409,7 @@ export const ChatProvider = ({ children }) => {
         input,
         isLoading,
         isBlocked,
+        setIsBlocked,
         isAuth,
         messageCount,
         setChats,
