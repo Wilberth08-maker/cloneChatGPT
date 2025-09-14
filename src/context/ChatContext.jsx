@@ -16,6 +16,8 @@ export const ChatProvider = ({ children }) => {
     const { isAuth, authToken } = useContext(AuthContext);
     const [pendingText, setPendingText] = useState("");
     const [streamingIndex, setStreamingIndex] = useState(0);
+    const [streamingChatID, setStreamingChatID] = useState(null);
+
 
     const [justCreatedChatId, setJustCreatedChatId] = useState(null);
 
@@ -107,7 +109,7 @@ export const ChatProvider = ({ children }) => {
 
 
     useEffect(() => {
-        if (!pendingText) return;
+        if (!pendingText || streamingChatID !== currentChatID) return;
 
         const words = pendingText.split(" ");
         let index = 0;
@@ -135,7 +137,13 @@ export const ChatProvider = ({ children }) => {
         }, 70);
 
         return () => clearInterval(interval);
-    }, [pendingText, currentChatID]);
+    }, [pendingText, currentChatID, streamingChatID]);
+
+    useEffect(() => {
+        setPendingText("");
+        setStreamingChatID(null);
+        setStreamingIndex(0);
+    }, [currentChatID]);
 
     // Maneja el envío de mensajes
     const handleSendMessage = async () => {
@@ -193,12 +201,14 @@ export const ChatProvider = ({ children }) => {
 
                         const initialMessage = [newUserMessage, { role: 'assistant', content: '' }];
 
-                        // Añade el nuevo chat en la parte superior de la lista, 
-                        // con el mensaje del usuario y una respuesta vacía del asistente.
-                        setChats(prevChats => [{
-                            ...newChat,
-                            messages: initialMessage,
-                        }, ...prevChats]);
+                        // Añade el nuevo chat a la lista de chats y selecciona, ordenando por fecha
+                        setChats(prevChats => {
+                            const updated = [...prevChats, {
+                                ...newChat,
+                                messages: initialMessage,
+                            }];
+                            return updated.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt));
+                        });
 
                         setCurrentChatID(chatIdToUse);
 
@@ -274,6 +284,10 @@ export const ChatProvider = ({ children }) => {
 
             const data = await response.json();
 
+            setPendingText(data.reply);
+            setStreamingChatID(chatIdToUse);
+            setStreamingIndex(0);
+
             //Actualizar el estado 'chats' directamente con la respuesta de la IA.
             setChats(prevChats => {
                 return prevChats.map(chat =>
@@ -285,9 +299,6 @@ export const ChatProvider = ({ children }) => {
 
             // Incrementa el contador de mensajes si el usuario no está autenticado
             setMessageCount(prev => prev + 1);
-
-            setPendingText(data.reply);
-            setStreamingIndex(0);
 
         } catch (error) {
             console.error("Error al comunicarse con la IA o guardar chat:", error);
@@ -313,6 +324,9 @@ export const ChatProvider = ({ children }) => {
     // Maneja la selección de un chat
     const handleChatSelect = (chatId) => {
         setCurrentChatID(chatId);
+        setPendingText("");
+        setStreamingChatID(null);
+        setStreamingIndex(0);
         setInput("");
     }
 
