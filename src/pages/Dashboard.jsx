@@ -23,15 +23,18 @@ function Dashboard() {
     const name = userPayload?.email?.split("@")[0] || "Invitado";
 
     return (
-        <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 h-full w-full align-center justify-center items-center">
+        <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 items-center justify-center">
 
-            <div className="max-w-4xl mx-auto px-6 py-8 border border-gray-200 dark:border-gray-700 rounded-xl shadow-md dark:bg-gray-800 align-center justify-center items-center h-full w-full">
-                <div className="flex justify-between justify-center items-center mb-6 align-center">
+            <div className="max-w-4xl w-full mx-auto p-6 border border-gray-200 dark:border-gray-700 rounded-xl shadow-md dark:bg-gray-800">
+                <div className="flex justify-between items-center mb-6">
                     <button
                         onClick={() => navigate(-1)}
                         className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition"
                     >
-                        ← Regresar
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                        </svg>
+
                     </button>
 
                     <button
