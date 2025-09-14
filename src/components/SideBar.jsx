@@ -123,7 +123,7 @@ const SideBar = ({ className, onCollapse, onClose, onMenuSearchOpen, onMenuSearc
               onClick={() => window.open("https://chatgpt.com/g/g-kZ0eYXlJe-scholar-gpt", "_blank")}
               className="itemList flex items-center justify-between w-full p-2 rounded-xl text-gray-900 hover:bg-[#ebebeb] transition-colors duration-200 dark:text-gray-200 dark:hover:bg-gray-800">
               <div className="flex-shrink-0 w-5 h-5 rounded-full overflow-hidden flex items-center justify-center bg-gray-200 mr-2">
-                <img alt="Scholar GPT Icon" src="./public/scholarGPT.png"
+                <img alt="Scholar GPT Icon" src="/scholarGPT.png"
                   className="w-full h-full object-cover" />
               </div>
               <span className="flex-grow text-left">Scholar GPT</span>
