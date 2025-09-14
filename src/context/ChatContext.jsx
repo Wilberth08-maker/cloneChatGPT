@@ -28,6 +28,34 @@ export const ChatProvider = ({ children }) => {
         Authorization: `Bearer ${authToken}`,
     };
 
+    // Maneja el bloqueo de usuarios no autenticados después de 3 mensajes
+    useEffect(() => {
+        if (!isAuth) {
+            const blockedUntil = localStorage.getItem("guestBlockedUntil");
+            if (blockedUntil && Date.now() < parseInt(blockedUntil)) {
+                setIsBlocked(true);
+            } else {
+                localStorage.removeItem("guestBlockedUntil");
+                setIsBlocked(false);
+            }
+        }
+    }, [isAuth]);
+
+    // Retorna el tiempo restante de bloqueo en formato legible
+    const getBlockCountdown = () => {
+        const blockedUntil = localStorage.getItem("guestBlockedUntil");
+        if (!blockedUntil) return null;
+
+        const remainingMs = parseInt(blockedUntil) - Date.now();
+        if (remainingMs <= 0) return null;
+
+        const minutes = Math.floor(remainingMs / 60000);
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+
+        return `Vuelve en ${hours}h ${mins}min`;
+    };
+
     const fetchChats = useCallback(async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/chats`, {
@@ -155,6 +183,7 @@ export const ChatProvider = ({ children }) => {
         // Verifica si el usuario no está autenticado y ya envió 3 mensajes
         if (!isAuth && messageCount >= 3) {
             setIsBlocked(true);
+            localStorage.setItem("guestBlockedUntil", Date.now() + 2 * 60 * 60 * 1000);
 
             const authPrompt = {
                 role: 'assistant',
@@ -394,7 +423,8 @@ export const ChatProvider = ({ children }) => {
         setIsMenuSearchOpen,
         searchTerm,
         setSearchTerm,
-        searchRef
+        searchRef,
+        getBlockCountdown
     }
 
     return (
