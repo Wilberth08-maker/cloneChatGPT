@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+html, body, #root {
+  height: 100%;
+}
+
 body {
   background-color: rgb(226, 225, 225);
   color: rgb(0, 0, 0);
