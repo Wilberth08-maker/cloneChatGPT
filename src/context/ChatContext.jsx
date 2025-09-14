@@ -409,12 +409,16 @@ export const ChatProvider = ({ children }) => {
     const [isMenuSearchOpen, setIsMenuSearchOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const searchRef = useRef(null);
+    const handleEditMessage = useCallback((text) => {
+        setInput(text);
+    }, []);
 
     const chatProps = {
         chats,
         currentChatID,
         messages,
         input,
+        setInput,
         isLoading,
         isBlocked,
         setIsBlocked,
@@ -440,6 +444,7 @@ export const ChatProvider = ({ children }) => {
         searchRef,
         getBlockCountdown,
         isStreaming,
+        handleEditMessage,
     }
 
     return (
