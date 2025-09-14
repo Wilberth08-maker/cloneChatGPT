@@ -17,7 +17,7 @@ export const ChatProvider = ({ children }) => {
     const [pendingText, setPendingText] = useState("");
     const [streamingIndex, setStreamingIndex] = useState(0);
     const [streamingChatID, setStreamingChatID] = useState(null);
-
+    const [isStreaming, setIsStreaming] = useState(false);
 
     const [justCreatedChatId, setJustCreatedChatId] = useState(null);
 
@@ -145,6 +145,8 @@ export const ChatProvider = ({ children }) => {
         const words = pendingText.split(" ");
         let index = 0;
 
+        setIsStreaming(true);
+
         const interval = setInterval(() => {
             index += 2;
             if (index > words.length) index = words.length;
@@ -164,10 +166,16 @@ export const ChatProvider = ({ children }) => {
                 )
             );
 
-            if (index >= words.length) clearInterval(interval);
+            if (index >= words.length) {
+                clearInterval(interval);
+                setIsStreaming(false);
+            }
         }, 70);
 
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+            setIsStreaming(false);
+        }
     }, [pendingText, currentChatID, streamingChatID]);
 
     useEffect(() => {
@@ -430,7 +438,8 @@ export const ChatProvider = ({ children }) => {
         searchTerm,
         setSearchTerm,
         searchRef,
-        getBlockCountdown
+        getBlockCountdown,
+        isStreaming,
     }
 
     return (
