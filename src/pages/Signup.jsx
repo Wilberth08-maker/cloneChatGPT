@@ -1,11 +1,15 @@
 import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { authSchema } from "@/schemas/authSchema";
 import { registerUserService } from "@/service/userService"
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
     // usamos useForm 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: zodResolver(authSchema),
+    });
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {

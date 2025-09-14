@@ -1,4 +1,6 @@
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { authSchema } from "@/schemas/authSchema";
 import { loginUserService } from "@/service/userService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +12,9 @@ const Login = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        resolver: zodResolver(authSchema),
+    });
     const navigate = useNavigate();
     const { login } = useAuthContext();
 
