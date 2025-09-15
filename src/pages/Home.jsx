@@ -3,6 +3,7 @@ import Chats from '@/components/Chats';
 import SideBarCompact from '@/components/SideBarCompact';
 import AuthModal from '@/components/AuthModal';
 import { useChatContext } from '@/hooks/useChatContext';
+import ConfirmModal from '@/components/ConfirmModal';
 const Home = () => {
 
     const {
@@ -12,10 +13,13 @@ const Home = () => {
         setIsMobileOpen,
         setIsMenuSearchOpen,
         isBlocked,
+        showConfirmModal,
     } = useChatContext();
 
     return (
         <div className="flex h-screen">
+            {showConfirmModal && <ConfirmModal />}
+
             {isBlocked && <AuthModal />}
             {/* ESCRITORIO */}
             <div className='hidden md:block'>
