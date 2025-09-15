@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
-import { useDarkMode } from '../context/DarkModeContext';
-import '../index.css';
+import { useEffect, useRef, useState } from 'react';
+import { useDarkMode } from '@/context/DarkModeContext';
+import '@/index.css';
 import SearchMenu from './SearchMenu';
 import { useChatContext } from '@/hooks/useChatContext';
 import { useAuthContext } from '@/hooks/useAuthContext';

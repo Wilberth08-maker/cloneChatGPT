@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuthContext } from "@/hooks/useAuthContext";
-import { useChatContext } from "../hooks/useChatContext";
+import { useChatContext } from "@/hooks/useChatContext";
 
 
 function Dashboard() {

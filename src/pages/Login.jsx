@@ -5,7 +5,7 @@ import { loginUserService } from "@/service/userService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "@/hooks/useAuthContext";
-import { useDarkMode } from "../context/DarkModeContext";
+import { useDarkMode } from "@/context/DarkModeContext";
 
 const Login = () => {
     // usamos useForm

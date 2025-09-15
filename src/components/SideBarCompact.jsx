@@ -1,5 +1,5 @@
-import SearchMenu from "./SearchMenu"
-import { useDarkMode } from '../context/DarkModeContext';
+import SearchMenu from "./SearchMenu";
+import { useDarkMode } from '@/context/DarkModeContext';
 import { useEffect } from "react";
 import { useChatContext } from "@/hooks/useChatContext";
 

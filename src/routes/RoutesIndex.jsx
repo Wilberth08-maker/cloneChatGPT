@@ -1,10 +1,10 @@
-import { Routes, Route } from "react-router-dom"
-import Dashboard from "@/pages/Dashboard"
-import Login from "@/pages/Login"
-import NotFound from "@/pages/NotFound"
-import Signup from "@/pages/Signup"
-import ProtectedRoute from "./ProtectedRoute"
-import Home from "@/pages/Home"
+import { Routes, Route } from "react-router-dom";
+import Dashboard from "@/pages/Dashboard";
+import Login from "@/pages/Login";
+import NotFound from "@/pages/NotFound";
+import Signup from "@/pages/Signup";
+import ProtectedRoute from "./ProtectedRoute";
+import Home from "@/pages/Home";
 
 const RoutesIndex = () => {
     return (

@@ -1,6 +1,6 @@
 // rutas privadas 
 import { Navigate } from "react-router-dom";
-import { useAuthContext } from "@/hooks/useAuthContext"
+import { useAuthContext } from "@/hooks/useAuthContext";
 
 const ProtectedRoute = ({ children }) => {
     const { isAuth } = useAuthContext(); // ¿Estás Autenticado?

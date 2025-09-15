@@ -1,5 +1,5 @@
-import { useDarkMode } from "../context/DarkModeContext"
-import { useChatContext } from '../hooks/useChatContext';
+import { useDarkMode } from "@/context/DarkModeContext";
+import { useChatContext } from '@/hooks/useChatContext';
 
 const AuthModal = () => {
     const { darkMode, setDarkMode } = useDarkMode();

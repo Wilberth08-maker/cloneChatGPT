@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDarkMode } from '../context/DarkModeContext';
-import '../index.css';
-import { useChatContext } from '../hooks/useChatContext';
-import { useAuthContext } from '../hooks/useAuthContext';
-import MessageContent from '../context/MessageContent';
+import { useDarkMode } from '@/context/DarkModeContext';
+import '@/index.css';
+import { useChatContext } from '@/hooks/useChatContext';
+import { useAuthContext } from '@/hooks/useAuthContext';
+import MessageContent from '@/context/MessageContent';
 import CopyButton from './CopyButton';
 
 const Chats = ({ onOpenMenu }) => {

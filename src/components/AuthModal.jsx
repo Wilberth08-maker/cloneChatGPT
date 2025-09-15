@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom"
-import { useState } from "react"
-import { useDarkMode } from "../context/DarkModeContext"
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useDarkMode } from "@/context/DarkModeContext";
 
 const AuthModal = () => {
     const [isOpen, setIsOpen] = useState(true);
