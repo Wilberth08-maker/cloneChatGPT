@@ -18,6 +18,8 @@ export const ChatProvider = ({ children }) => {
     const [streamingIndex, setStreamingIndex] = useState(0);
     const [streamingChatID, setStreamingChatID] = useState(null);
     const [isStreaming, setIsStreaming] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [chatIdToDelete, setChatIdToDelete] = useState(null);
 
     const [justCreatedChatId, setJustCreatedChatId] = useState(null);
 
@@ -373,19 +375,21 @@ export const ChatProvider = ({ children }) => {
     }
 
     // Maneja la eliminación de un chat
-    const handleDeleteChat = async (chatIdToDelete) => {
-        if (!window.confirm('¿Estás seguro de que quieres eliminar este chat?')) {
-            return;
-        }
+    const handleDeleteClick = (id) => {
+        setChatIdToDelete(id);
+        setShowConfirmModal(true);
+    };
 
-        if (!isAuth) return;
+    const confirmDelete = async () => {
+        setShowConfirmModal(false);
+        if (!isAuth || !chatIdToDelete) return;
 
         try {
             const response = await fetch(`${API_BASE_URL}/chats/${chatIdToDelete}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${authToken}`,
-                }
+                },
             });
 
             if (!response.ok) {
@@ -393,14 +397,25 @@ export const ChatProvider = ({ children }) => {
                 throw new Error(`Error al eliminar chat: ${errorData.error || response.statusText}`);
             }
 
-            await fetchChats(); // Refresca la lista de chats después de eliminar
-
+            await fetchChats(); // Refresca la lista de chats
         } catch (error) {
             console.error("Error al eliminar chat:", error);
-            setMessages(prevMessages => [...prevMessages, { role: 'assistant', content: `No se pudo eliminar el chat: ${error.message}` }]);
+            setMessages(prev => [
+                ...prev,
+                {
+                    role: 'assistant',
+                    content: `No se pudo eliminar el chat: ${error.message}`,
+                },
+            ]);
+        } finally {
+            setChatIdToDelete(null);
         }
     };
 
+    const cancelDelete = () => {
+        setShowConfirmModal(false);
+        setChatIdToDelete(null);
+    };
     // CONSTANTES PARA MANEJAR EL ESTADO DE LOS SIDEBAR
     const [isCompact, setIsCompact] = useState(false);
     const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -431,7 +446,11 @@ export const ChatProvider = ({ children }) => {
         handleSendMessage,
         handleNewChat,
         handleChatSelect,
-        handleDeleteChat,
+        handleDeleteClick,
+        chatIdToDelete,
+        showConfirmModal,
+        confirmDelete,
+        cancelDelete,
         isCompact,
         setIsCompact,
         isMobileOpen,
