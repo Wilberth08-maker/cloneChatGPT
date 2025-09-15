@@ -6,20 +6,17 @@ import { useChatContext } from '@/hooks/useChatContext';
 const Home = () => {
 
     const {
-        isAuth,
-        messageCount,
         isCompact,
         setIsCompact,
         isMobileOpen,
         setIsMobileOpen,
         setIsMenuSearchOpen,
+        isBlocked,
     } = useChatContext();
 
     return (
         <div className="flex h-screen">
-            {!isAuth && messageCount >= 3 && (
-                <AuthModal />
-            )}
+            {isBlocked && <AuthModal />}
             {/* ESCRITORIO */}
             <div className='hidden md:block'>
                 {isCompact ? (
