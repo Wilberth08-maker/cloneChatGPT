@@ -21,7 +21,7 @@ export const ChatProvider = ({ children }) => {
 
     const [justCreatedChatId, setJustCreatedChatId] = useState(null);
 
-    const API_BASE_URL = 'http://localhost:5000/api';
+    const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api`;
 
     const authHeaders = {
         'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ export const ChatProvider = ({ children }) => {
                 setMessages([{ role: 'assistant', content: "No se pudieron cargar los chats existentes." }]);
             }
         }
-    }, [API_BASE_URL, authToken, justCreatedChatId]);
+    }, [authToken, justCreatedChatId]);
 
     useEffect(() => {
         if (isAuth && authToken) {
@@ -427,7 +427,6 @@ export const ChatProvider = ({ children }) => {
         setChats,
         setCurrentChatID,
         setMessages,
-        setInput,
         setIsLoading,
         handleSendMessage,
         handleNewChat,
