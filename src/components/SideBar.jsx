@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 const SideBar = ({ className, onCollapse, onClose, onMenuSearchOpen, onMenuSearchClose, }) => {
 
   const {
-    chats, currentChatID, handleNewChat, handleChatSelect, handleDeleteChat, isMenuSearchOpen, setIsMenuSearchOpen, setSearchTerm, searchRef, setIsMobileOpen, isAuth
+    chats, currentChatID, handleNewChat, handleChatSelect, handleDeleteClick, isMenuSearchOpen, setIsMenuSearchOpen, setSearchTerm, searchRef, setIsMobileOpen, isAuth
   } = useChatContext();
 
   const { userPayload } = useAuthContext();
@@ -154,7 +154,7 @@ const SideBar = ({ className, onCollapse, onClose, onMenuSearchOpen, onMenuSearc
                       className="ml-2 p-2 rounded-full hover:bg-red-100 text-red-600 transition-colors duration-200 dark:hover:bg-red-700 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleDeleteChat(chat.id);
+                        handleDeleteClick(chat.id);
                       }}
                       disabled={!isAuth}
                       title="Eliminar chat"
