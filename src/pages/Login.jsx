@@ -33,8 +33,8 @@ const Login = () => {
                 toast.error("❌ Error al iniciar sesión, intenta de nuevo.");
             }
         } catch (error) {
-            console.log("Ocurrio un error en login:", error);
-            toast.error("Hubo un problema al iniciar sesión");
+            console.log("Ocurrio un error en login:", error.message);
+            toast.error(error.message || "Hubo un problema al iniciar sesión");
         }
     };
 
