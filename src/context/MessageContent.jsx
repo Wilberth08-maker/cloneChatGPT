@@ -16,7 +16,7 @@ const MessageContent = React.memo(({ role, content, isLoading, isLast }) => {
             <div
                 className={`message__bubble p-2.5 rounded-3xl ${role === "user"
                     ? "message__user dark:text-gray-200 dark:bg-gray-800 mt-4"
-                    : "message__assistant dark:text-gray-200"
+                    : "message__assistant  dark:text-gray-200"
                     }`}
             >
                 {content ? (
@@ -34,6 +34,19 @@ const MessageContent = React.memo(({ role, content, isLoading, isLast }) => {
                                                 style={darkMode ? dracula : oneLight}
                                                 PreTag="div"
                                                 className="message__code-block"
+                                                customStyle={{
+                                                    maxWidth: "100%",
+                                                    overflowX: "auto",
+                                                    whiteSpace: "pre-wrap",
+                                                    wordBreak: "break-word",
+                                                    boxSizing: "border-box",
+                                                }}
+                                                codeTagProps={{
+                                                    style: {
+                                                        whiteSpace: "pre-wrap",
+                                                        wordBreak: "break-word",
+                                                    },
+                                                }}
                                                 {...props}
                                             >
                                                 {String(children).replace(/\n$/, '')}
