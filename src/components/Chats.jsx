@@ -110,7 +110,7 @@ const Chats = ({ onOpenMenu }) => {
         <>
             <div className=" flex-1 bg-white flex flex-col min-h-[100dvh] dark:bg-gray-900 dark:text-white">
                 <div className="flex flex-col h-full dark:bg-gray-900 dark:text-gray-100 ">
-                    <div className={`sticky top-0 z-10 bg-[#FEFEFE] ${messages.length > 0 ? "border-b border-gray-100 dark:border-gray-700 bg-[#FEFEFE]" : ""} flex items-center justify-between pl-2 pr-2 pt-1.5 pb-1.5 `}>
+                    <div className={`sticky top-0 z-10 bg-[#FEFEFE] dark:bg-gray-900 ${messages.length > 0 ? "border-b border-gray-100 dark:border-gray-700 bg-[#FEFEFE] dark:bg-gray-900" : ""} flex items-center justify-between pl-2 pr-2 pt-1.5 pb-1.5 `}>
                         <div className='flex'>
                             <button
                                 className="md:hidden p-2 rounded-3xl text-gray-900 transition-colors duration-200 hover:bg-[#ebebeb] dark:text-gray-200 dark:hover:bg-gray-700 hover:bg-gray-100"
